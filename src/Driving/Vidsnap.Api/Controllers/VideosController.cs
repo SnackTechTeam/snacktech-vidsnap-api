@@ -26,19 +26,19 @@ namespace Vidsnap.Api.Controllers
             => await ExecucaoPadrao("Videos.ObterLinkPreAssinadoDeUpload", _processarVideoUseCase.GerarUrlPreAssinadaParaUpload(urlPreAssinadaRequest));
 
         /// <summary>
-        /// Cadastra um novo vídeo para processamento. Necessário que o arquivo do vídeo já tenha sido enviado para o ambiente.
+        /// Cadastra um novo vídeo para processamento.
         /// </summary>
         /// <remarks>
-        /// Cadastra um novo vídeo para processamento. Necessário que o arquivo do vídeo já tenha sido enviado para o ambiente.
+        /// Cadastra um novo vídeo para processamento.
         /// </remarks>
         /// <param name="novoVideoRequest">Os dados do video a ser processado.</param>
         /// <returns>Um <see cref="IActionResult"/> representando o resultado da operação.</returns>
         [HttpPost]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType<NovoVideoRequest>(StatusCodes.Status200OK)]
+        [ProducesResponseType<NovoVideoResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Cadastra um novo vídeo para processamento. Necessário que o arquivo do vídeo já tenha sido enviado para o ambiente.")]
+        [SwaggerOperation(Summary = "Cadastra um novo vídeo para processamento.")]
         public async Task<IActionResult> Post([FromBody] NovoVideoRequest novoVideoRequest)
             => await ExecucaoPadrao(
                 "Videos.Post", 
@@ -55,10 +55,10 @@ namespace Vidsnap.Api.Controllers
         /// <returns>Um <see cref="IActionResult"/> representando o resultado da operação.</returns>
         [HttpGet("/usuario/{idUsuario}")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType<NovoVideoRequest>(StatusCodes.Status200OK)]
+        [ProducesResponseType<IReadOnlyList<VideoResponse>>(StatusCodes.Status200OK)]
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Cadastra um novo vídeo para processamento. Necessário que o arquivo do vídeo já tenha sido enviado para o ambiente.")]
+        [SwaggerOperation(Summary = "Lista todos os vídeo cadastrados pelo usuário")]
         public async Task<IActionResult> ObterVideosPorUsuario([FromRoute] Guid idUsuario)
             => await ExecucaoPadrao(
                 "Videos.ObterVideosPorUsuario", 
@@ -66,20 +66,20 @@ namespace Vidsnap.Api.Controllers
             );
 
         /// <summary>
-        /// Busca todos os vídeos cadastrados pelo usuário.
+        /// Atualiza o status de processamento do vídeo.
         /// </summary>
         /// <remarks>
-        /// Busca todos os vídeos cadastrados pelo usuário.
+        /// Atualiza o status de processamento do vídeo.
         /// </remarks>
         /// <param name="idVideo">Identificador do video.</param>
         /// <param name="atualizaStatusVideoRequest">Dados do status para ser atualizados</param>
         /// <returns>Um <see cref="IActionResult"/> representando o resultado da operação.</returns>
         [HttpPut("/{idVideo}/status")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType<NovoVideoRequest>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Cadastra um novo vídeo para processamento. Necessário que o arquivo do vídeo já tenha sido enviado para o ambiente.")]
+        [SwaggerOperation(Summary = "Atualiza o status de processamento do vídeo.")]
         public async Task<IActionResult> AtualizarStatusDeProcessamento([FromRoute] Guid idVideo, [FromBody] AtualizaStatusVideoRequest atualizaStatusVideoRequest)
             => await ExecucaoPadrao(
                 "Videos.AtualizarStatusDeProcessamento", 
