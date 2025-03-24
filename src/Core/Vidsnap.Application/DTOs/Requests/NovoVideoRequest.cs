@@ -3,7 +3,7 @@
     public record class NovoVideoRequest(
         Guid IdUsuario,
         string EmailUsuario,
-        string Nome, 
+        string NomeVideo, 
         string Extensao, 
         int Tamanho,
         int Duracao

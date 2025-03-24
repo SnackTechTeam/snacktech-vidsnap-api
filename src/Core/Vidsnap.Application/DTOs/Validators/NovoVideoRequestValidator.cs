@@ -14,9 +14,9 @@ namespace Vidsnap.Application.DTOs.Validators
                 .NotEmpty().WithMessage("O EmailUsuario é obrigatório.")
                 .EmailAddress().WithMessage("O EmailUsuario deve ser um endereço de e-mail válido.");
 
-            RuleFor(v => v.Nome)
-                .NotEmpty().WithMessage("O Nome é obrigatório.")
-                .MaximumLength(100).WithMessage("O Nome deve ter no máximo 100 caracteres.");
+            RuleFor(v => v.NomeVideo)
+                .NotEmpty().WithMessage("O NomeVideo é obrigatório.")
+                .MaximumLength(100).WithMessage("O NomeVideo deve ter no máximo 100 caracteres.");
 
             RuleFor(v => v.Extensao)
                 .NotEmpty().WithMessage("A Extensão do vídeo é obrigatória.")

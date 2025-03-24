@@ -10,7 +10,7 @@ namespace Vidsnap.Application.Extensions.Entities
         {
             return new(novoVideoRequest.IdUsuario,
                 novoVideoRequest.EmailUsuario,
-                novoVideoRequest.Nome, 
+                novoVideoRequest.NomeVideo, 
                 novoVideoRequest.Extensao, 
                 novoVideoRequest.Tamanho, 
                 novoVideoRequest.Duracao

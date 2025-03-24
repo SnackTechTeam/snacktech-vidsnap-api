@@ -38,7 +38,7 @@ namespace Vidsnap.Application.UseCases
                 var video = novoVideoRequest.ParaVideo();
                 await _videoRepository.CriarAsync(video);
 
-                var presignedUrl = await ObterUrlPreAssinadaAsync(novoVideoRequest.IdUsuario, novoVideoRequest.Nome);
+                var presignedUrl = await ObterUrlPreAssinadaAsync(novoVideoRequest.IdUsuario, novoVideoRequest.NomeVideo);
 
                 var novoVideoResponse = video.ParaNovoVideoResponse();
                 novoVideoResponse.UrlPreAssinadaDeUpload = presignedUrl;

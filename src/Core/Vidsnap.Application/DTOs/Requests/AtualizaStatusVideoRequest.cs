@@ -3,6 +3,7 @@
     public record class AtualizaStatusVideoRequest(
         Guid IdVideo,
         string NovoStatus,
-        string? UrlZip = null
+        string? UrlZip = null,
+        string? UrlImagem = null
     );
 }
