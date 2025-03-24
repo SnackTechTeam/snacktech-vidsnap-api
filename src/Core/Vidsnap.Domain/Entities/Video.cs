@@ -10,12 +10,13 @@ namespace Vidsnap.Domain.Entities
         public Guid Id { get; private set; } = Guid.NewGuid();
         public Guid IdUsuario { get; private set; }
         public string EmailUsuario { get; private set; }
-        public string Nome { get; private set; }
+        public string NomeVideo { get; private set; }
         public string Extensao { get; private set; }
         public int Tamanho { get; private set; }
         public int Duracao { get; private set; }
         public DateTime DataInclusao { get; private set; } = DateTime.Now;
-        public string? URLZipe { get; private set; } = null;
+        public string? URLZip { get; private set; } = null;
+        public string? URLImagem { get; private set; } = null;
         public Status StatusAtual { get; set; } = Status.Recebido;
         public IReadOnlyCollection<VideoStatus> VideoStatuses => _videoStatuses.AsReadOnly();
 
@@ -25,7 +26,7 @@ namespace Vidsnap.Domain.Entities
         {
             IdUsuario = CommonGuards.AgainstEmptyGuid(idUsuario, nameof(idUsuario));
             EmailUsuario = CommonGuards.AgainstInvalidEmail(emailUsuario, nameof(emailUsuario));
-            Nome = CommonGuards.AgainstNullOrWhiteSpace(nome, nameof(nome));
+            NomeVideo = CommonGuards.AgainstNullOrWhiteSpace(nome, nameof(nome));
             Extensao = CommonGuards.AgainstNullOrWhiteSpace(extensao, nameof(extensao));
             Tamanho = CommonGuards.AgainstNegativeOrZero(tamanho, nameof(tamanho));
             Duracao = CommonGuards.AgainstNegativeOrZero(duracao, nameof(duracao));
@@ -43,20 +44,20 @@ namespace Vidsnap.Domain.Entities
 
         public void IncluirURLZipe(string urlZipe)
         {
-            if (!string.IsNullOrEmpty(URLZipe))
+            if (!string.IsNullOrEmpty(URLZip))
             {
-                throw new InvalidOperationException($"{nameof(URLZipe)} já foi definida e não pode ser modificada.");
+                throw new InvalidOperationException($"{nameof(URLZip)} já foi definida e não pode ser modificada.");
             }
 
             if (StatusAtual != Status.FinalizadoComSucesso)
             {
-                throw new InvalidOperationException($"{nameof(URLZipe)} apenas pode ser definida quando {nameof(StatusAtual)} for igual a {Status.FinalizadoComSucesso}");
+                throw new InvalidOperationException($"{nameof(URLZip)} apenas pode ser definida quando {nameof(StatusAtual)} for igual a {Status.FinalizadoComSucesso}");
             }
 
             CommonGuards.AgainstNullOrWhiteSpace(urlZipe, nameof(urlZipe));
             CommonGuards.AgainstInvalidUrl(urlZipe, nameof(urlZipe));
 
-            URLZipe = urlZipe;
+            URLZip = urlZipe;
         }
     }
 }

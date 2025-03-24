@@ -27,7 +27,7 @@ namespace Vidsnap.UnitTest.Driven.Vidsnap.DataBase.Repositories
 
             //assert
             Assert.Equal(1, await appDbContext.Videos.CountAsync());
-            Assert.True(await appDbContext.Videos.AnyAsync(v => v.Nome == "video"));
+            Assert.True(await appDbContext.Videos.AnyAsync(v => v.NomeVideo == "video"));
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace Vidsnap.UnitTest.Driven.Vidsnap.DataBase.Repositories
 
             //assert
             resultado.Should().NotBeNull();
-            resultado.Nome.Should().Be(video.Nome);
+            resultado.NomeVideo.Should().Be(video.NomeVideo);
         }
 
         [Fact]
@@ -191,7 +191,7 @@ namespace Vidsnap.UnitTest.Driven.Vidsnap.DataBase.Repositories
             resultado.Should().Be(2);//Deve ser alterado Video e adicionado VideoStatus
             videoAlterado.StatusAtual.Should().Be(Status.FinalizadoComSucesso);
             videoAlterado.VideoStatuses.Any(vs => vs.Status == Status.FinalizadoComSucesso).Should().BeTrue();
-            videoAlterado.URLZipe.Should().Be(urlZip);
+            videoAlterado.URLZip.Should().Be(urlZip);
         }
 
         [Fact]

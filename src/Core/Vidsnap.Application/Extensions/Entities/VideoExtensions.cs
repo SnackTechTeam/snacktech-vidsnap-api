@@ -21,7 +21,7 @@ namespace Vidsnap.Application.Extensions.Entities
         {
             return new(video.Id,
                 video.IdUsuario,
-                video.Nome,
+                video.NomeVideo,
                 video.Extensao,
                 video.Tamanho,
                 video.Duracao,
@@ -38,11 +38,11 @@ namespace Vidsnap.Application.Extensions.Entities
 
             return new(video.Id,
                 video.IdUsuario,
-                video.Nome,
+                video.NomeVideo,
                 video.Extensao,
                 video.Tamanho,
                 video.Duracao,
-                video.URLZipe,
+                video.URLZip,
                 video.DataInclusao,
                 video.StatusAtual.ToString(),
                 videoStatuses

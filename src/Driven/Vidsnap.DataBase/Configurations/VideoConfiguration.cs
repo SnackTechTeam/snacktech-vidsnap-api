@@ -22,7 +22,7 @@ namespace Vidsnap.DataBase.Configurations
                 .HasMaxLength(320)
                 .IsRequired();
 
-            builder.Property(v => v.Nome)
+            builder.Property(v => v.NomeVideo)
                 .HasColumnType("varchar")
                 .HasMaxLength(100)
                 .IsRequired();
@@ -44,12 +44,17 @@ namespace Vidsnap.DataBase.Configurations
                 .HasColumnType("datetime")
                 .IsRequired();
 
-            builder.Property(v => v.URLZipe)
+            builder.Property(v => v.URLZip)
+                .HasColumnType("varchar")
+                .HasMaxLength(500);
+
+            builder.Property(v => v.URLImagem)
                 .HasColumnType("varchar")
                 .HasMaxLength(500);
 
             builder.HasMany(v => v.VideoStatuses)
-                .WithOne(vs => vs.Video);
+                .WithOne(vs => vs.Video)
+                .HasForeignKey(v => v.IdVideo);
 
             builder.Navigation(nameof(Video.VideoStatuses))
                 .HasField("_videoStatuses");

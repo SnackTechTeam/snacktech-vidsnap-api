@@ -18,12 +18,13 @@ namespace Vidsnap.DataBase.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EmailUsuario = table.Column<string>(type: "varchar(320)", maxLength: 320, nullable: false),
-                    Nome = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    NomeVideo = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     Extensao = table.Column<string>(type: "varchar(5)", maxLength: 5, nullable: false),
                     Tamanho = table.Column<int>(type: "int", nullable: false),
                     Duracao = table.Column<int>(type: "int", nullable: false),
                     DataInclusao = table.Column<DateTime>(type: "datetime", nullable: false),
-                    URLZipe = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true),
+                    URLZip = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true),
+                    URLImagem = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true),
                     StatusAtual = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -36,15 +37,15 @@ namespace Vidsnap.DataBase.Migrations
                 columns: table => new
                 {
                     Status = table.Column<int>(type: "int", nullable: false),
-                    VideoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdVideo = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DataInclusao = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_VideoStatus", x => new { x.VideoId, x.Status });
+                    table.PrimaryKey("PK_VideoStatus", x => new { x.IdVideo, x.Status });
                     table.ForeignKey(
-                        name: "FK_VideoStatus_Video_VideoId",
-                        column: x => x.VideoId,
+                        name: "FK_VideoStatus_Video_IdVideo",
+                        column: x => x.IdVideo,
                         principalTable: "Video",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);

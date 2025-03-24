@@ -10,7 +10,7 @@ namespace Vidsnap.DataBase.Configurations
         {
             builder.ToTable(nameof(VideoStatus));
 
-            builder.HasKey(vs => new { vs.VideoId, vs.Status });
+            builder.HasKey(vs => new { vs.IdVideo, vs.Status });
 
             builder.Property(vs => vs.Status)
                 .HasColumnType("int")

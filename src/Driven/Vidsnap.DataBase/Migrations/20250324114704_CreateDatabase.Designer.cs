@@ -12,7 +12,7 @@ using Vidsnap.DataBase.Context;
 namespace Vidsnap.DataBase.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250317111130_CreateDatabase")]
+    [Migration("20250324114704_CreateDatabase")]
     partial class CreateDatabase
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Vidsnap.DataBase.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -50,7 +50,7 @@ namespace Vidsnap.DataBase.Migrations
                     b.Property<Guid>("IdUsuario")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Nome")
+                    b.Property<string>("NomeVideo")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar");
@@ -61,7 +61,11 @@ namespace Vidsnap.DataBase.Migrations
                     b.Property<int>("Tamanho")
                         .HasColumnType("int");
 
-                    b.Property<string>("URLZipe")
+                    b.Property<string>("URLImagem")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar");
+
+                    b.Property<string>("URLZip")
                         .HasMaxLength(500)
                         .HasColumnType("varchar");
 
@@ -72,7 +76,7 @@ namespace Vidsnap.DataBase.Migrations
 
             modelBuilder.Entity("Vidsnap.Domain.Entities.VideoStatus", b =>
                 {
-                    b.Property<Guid>("VideoId")
+                    b.Property<Guid>("IdVideo")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -81,7 +85,7 @@ namespace Vidsnap.DataBase.Migrations
                     b.Property<DateTime>("DataInclusao")
                         .HasColumnType("datetime");
 
-                    b.HasKey("VideoId", "Status");
+                    b.HasKey("IdVideo", "Status");
 
                     b.ToTable("VideoStatus", (string)null);
                 });
@@ -90,7 +94,7 @@ namespace Vidsnap.DataBase.Migrations
                 {
                     b.HasOne("Vidsnap.Domain.Entities.Video", "Video")
                         .WithMany("VideoStatuses")
-                        .HasForeignKey("VideoId")
+                        .HasForeignKey("IdVideo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -50,7 +50,7 @@ namespace Vidsnap.UnitTest.Core.Vidsnap.Application.UseCases
 
             //assert
             resultado.Sucesso.Should().BeTrue();
-            video.URLZipe.Should().BeNull();
+            video.URLZip.Should().BeNull();
             video.StatusAtual.Should().Be(Status.Processando);
             video.VideoStatuses.Should().HaveCount(2);
         }
@@ -74,7 +74,7 @@ namespace Vidsnap.UnitTest.Core.Vidsnap.Application.UseCases
 
             //assert
             resultado.Sucesso.Should().BeTrue();
-            video.URLZipe.Should().Be(atualizaStatusVideoRequest.UrlZip);
+            video.URLZip.Should().Be(atualizaStatusVideoRequest.UrlZip);
             video.StatusAtual.Should().Be(Status.FinalizadoComSucesso);
             video.VideoStatuses.Should().HaveCount(2);
         }
