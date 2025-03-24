@@ -73,9 +73,10 @@ namespace Vidsnap.Application.UseCases
 
                     //Somente inclui a url do zip se ela for não nula e o status for FinalizadoComSucesso
                     if (!string.IsNullOrEmpty(atualizaStatusVideoRequest.UrlZip)
+                        && !string.IsNullOrEmpty(atualizaStatusVideoRequest.UrlImagem)
                         && status == Status.FinalizadoComSucesso)
                     {
-                        video.IncluirURLZipe(atualizaStatusVideoRequest.UrlZip);
+                        video.IncluirURLs(atualizaStatusVideoRequest.UrlZip, atualizaStatusVideoRequest.UrlImagem);
                     }
 
                     await _videoRepository.AtualizarStatusProcessamentoAsync(video, status);

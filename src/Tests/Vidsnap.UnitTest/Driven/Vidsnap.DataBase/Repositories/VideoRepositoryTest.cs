@@ -159,7 +159,7 @@ namespace Vidsnap.UnitTest.Driven.Vidsnap.DataBase.Repositories
         }
 
         [Fact]
-        public async Task AtualizarStatusProcessamentoAsync_QuandoTemUrlZip_DeveAtualizarUrl()
+        public async Task AtualizarStatusProcessamentoAsync_QuandoTemUrls_DeveAtualizarUrl()
         {
             //arrange
             var options = CriarOpcoesEmMemoria();
@@ -177,8 +177,9 @@ namespace Vidsnap.UnitTest.Driven.Vidsnap.DataBase.Repositories
 
             video.AtualizarStatus(Status.FinalizadoComSucesso);
 
-            var urlZip = "http://teste";
-            video.IncluirURLZipe(urlZip);
+            var urlZip = "http://teste/video.mp4";
+            var urlImagem = "http://teste/imagem.jpg";
+            video.IncluirURLs(urlZip, urlImagem);
 
             //act
             var resultado = await repository.AtualizarStatusProcessamentoAsync(video, Status.FinalizadoComSucesso);

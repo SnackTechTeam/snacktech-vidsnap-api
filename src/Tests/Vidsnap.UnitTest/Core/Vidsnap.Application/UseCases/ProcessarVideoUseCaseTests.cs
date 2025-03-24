@@ -75,6 +75,7 @@ namespace Vidsnap.UnitTest.Core.Vidsnap.Application.UseCases
             //assert
             resultado.Sucesso.Should().BeTrue();
             video.URLZip.Should().Be(atualizaStatusVideoRequest.UrlZip);
+            video.URLImagem.Should().Be(atualizaStatusVideoRequest.UrlImagem);
             video.StatusAtual.Should().Be(Status.FinalizadoComSucesso);
             video.VideoStatuses.Should().HaveCount(2);
         }
@@ -155,7 +156,11 @@ namespace Vidsnap.UnitTest.Core.Vidsnap.Application.UseCases
 
         private static AtualizaStatusVideoRequest CriarAtualizarVideoRequestValido(string status, bool withUrl = false)
         {
-            return new(Guid.NewGuid(), status, withUrl ? "http://teste" : null);
+            return new(
+                Guid.NewGuid(), 
+                status, 
+                withUrl ? "http://teste/video.mp4" : null,
+                withUrl ? "http://teste/imagem.jpg" : null);
         }
 
         private static Video CriarVideoValido()

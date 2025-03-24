@@ -42,22 +42,30 @@ namespace Vidsnap.Domain.Entities
             StatusAtual = status;
         }
 
-        public void IncluirURLZipe(string urlZipe)
+        public void IncluirURLs(string urlZip, string urlImagem)
         {
             if (!string.IsNullOrEmpty(URLZip))
             {
                 throw new InvalidOperationException($"{nameof(URLZip)} já foi definida e não pode ser modificada.");
             }
 
-            if (StatusAtual != Status.FinalizadoComSucesso)
+            if (!string.IsNullOrEmpty(URLImagem))
             {
-                throw new InvalidOperationException($"{nameof(URLZip)} apenas pode ser definida quando {nameof(StatusAtual)} for igual a {Status.FinalizadoComSucesso}");
+                throw new InvalidOperationException($"{nameof(URLImagem)} já foi definida e não pode ser modificada.");
             }
 
-            CommonGuards.AgainstNullOrWhiteSpace(urlZipe, nameof(urlZipe));
-            CommonGuards.AgainstInvalidUrl(urlZipe, nameof(urlZipe));
+            if (StatusAtual != Status.FinalizadoComSucesso)
+            {
+                throw new InvalidOperationException($"{nameof(URLZip)} e {nameof(URLImagem)} apenas podem ser definidas quando {nameof(StatusAtual)} for igual a {Status.FinalizadoComSucesso}");
+            }
 
-            URLZip = urlZipe;
+            CommonGuards.AgainstNullOrWhiteSpace(urlZip, nameof(urlZip));
+            CommonGuards.AgainstInvalidUrl(urlZip, nameof(urlZip));
+            CommonGuards.AgainstNullOrWhiteSpace(urlImagem, nameof(urlImagem));
+            CommonGuards.AgainstInvalidUrl(urlImagem, nameof(urlImagem));
+
+            URLZip = urlZip;
+            URLImagem = urlImagem;
         }
     }
 }
