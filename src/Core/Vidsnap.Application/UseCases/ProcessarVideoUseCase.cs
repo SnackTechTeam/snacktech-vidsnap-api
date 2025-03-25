@@ -21,7 +21,7 @@ namespace Vidsnap.Application.UseCases
         {
             try
             {
-                var presignedUrl = await ObterUrlPreAssinadaAsync(urlPreAssinadaRequest.IdUsuario, urlPreAssinadaRequest.NomeArquivo);
+                var presignedUrl = await ObterUrlPreAssinadaAsync(urlPreAssinadaRequest.IdUsuario, null, urlPreAssinadaRequest.NomeArquivo);
 
                 return new ResultadoOperacao<string>(presignedUrl);
             }
@@ -38,7 +38,7 @@ namespace Vidsnap.Application.UseCases
                 var video = novoVideoRequest.ParaVideo();
                 await _videoRepository.CriarAsync(video);
 
-                var presignedUrl = await ObterUrlPreAssinadaAsync(novoVideoRequest.IdUsuario, novoVideoRequest.NomeVideo);
+                var presignedUrl = await ObterUrlPreAssinadaAsync(novoVideoRequest.IdUsuario, video.Id, novoVideoRequest.NomeVideo);
 
                 var novoVideoResponse = video.ParaNovoVideoResponse();
                 novoVideoResponse.UrlPreAssinadaDeUpload = presignedUrl;
@@ -96,12 +96,13 @@ namespace Vidsnap.Application.UseCases
 
         #region Private Methods
 
-        private async Task<string> ObterUrlPreAssinadaAsync(Guid idUsuario, string nomeArquivo)
+        private async Task<string> ObterUrlPreAssinadaAsync(Guid idUsuario, Guid? idVideo, string nomeArquivo)
         {
             var presignedUrl = await _cloudFileStorageService.GetPreSignedURLAsync(
                     _cloudFileStorageSettings.ContainerName,
                     _cloudFileStorageSettings.TimeoutDuration,
                     idUsuario,
+                    idVideo,
                     nomeArquivo
                 );
 

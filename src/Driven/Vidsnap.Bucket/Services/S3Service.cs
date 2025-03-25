@@ -8,17 +8,24 @@ namespace Vidsnap.S3Bucket.Services
     {        
         private readonly IAmazonS3 _s3Client = s3Client;
 
-        public async Task<string> GetPreSignedURLAsync(string storageName, int timeoutDuration, Guid idUsuario, string fileName)
+        public async Task<string> GetPreSignedURLAsync(
+            string storageName, 
+            int timeoutDuration, 
+            Guid? idUsuario, 
+            Guid? idVideo, 
+            string fileName)
         {
             string urlString = string.Empty;
 
             try
             {
+                var pastaBase = idUsuario.HasValue ? $"{idUsuario.Value}/" : string.Empty;
+                var subPasta = idVideo.HasValue ? $"{idVideo.Value}/" : string.Empty;
+
                 var request = new GetPreSignedUrlRequest()
                 {
                     BucketName = storageName,
-                    Key = $"{idUsuario}/{fileName}",
-                    //Key = fileName,
+                    Key = $"{pastaBase}{subPasta}{fileName}",
                     Verb = HttpVerb.PUT,
                     Expires = DateTime.UtcNow.AddHours(timeoutDuration),
                     ContentType = "application/octet-stream"
