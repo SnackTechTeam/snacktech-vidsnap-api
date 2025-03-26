@@ -74,16 +74,16 @@ namespace Vidsnap.Api.Controllers
         /// <param name="idVideo">Identificador do video.</param>
         /// <param name="atualizaStatusVideoRequest">Dados do status para ser atualizados</param>
         /// <returns>Um <see cref="IActionResult"/> representando o resultado da operação.</returns>
-        [HttpPut("/{idVideo}/status")]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType<ErrorResponse>(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType<ErrorResponse>(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Atualiza o status de processamento do vídeo.")]
-        public async Task<IActionResult> AtualizarStatusDeProcessamento([FromRoute] Guid idVideo, [FromBody] AtualizaStatusVideoRequest atualizaStatusVideoRequest)
-            => await ExecucaoPadrao(
-                "Videos.AtualizarStatusDeProcessamento", 
-                _processarVideoUseCase.AtualizarStatusDeProcessamentoAsync(idVideo, atualizaStatusVideoRequest)
-            );
+        //[HttpPut("/{idVideo}/status")]
+        //[Consumes(MediaTypeNames.Application.Json)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType<ErrorResponse>(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType<ErrorResponse>(StatusCodes.Status500InternalServerError)]
+        //[SwaggerOperation(Summary = "Atualiza o status de processamento do vídeo.")]
+        //public async Task<IActionResult> AtualizarStatusDeProcessamento([FromRoute] Guid idVideo, [FromBody] AtualizaStatusVideoRequest atualizaStatusVideoRequest)
+        //    => await ExecucaoPadrao(
+        //        "Videos.AtualizarStatusDeProcessamento", 
+        //        _processarVideoUseCase.AtualizarStatusDeProcessamentoAsync(idVideo, atualizaStatusVideoRequest)
+        //    );
     }
 }
