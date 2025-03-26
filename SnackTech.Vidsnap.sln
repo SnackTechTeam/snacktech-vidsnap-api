@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vidsnap.DataBase", "src\Dri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vidsnap.SQS", "src\Driven\Vidsnap.SQS\Vidsnap.SQS.csproj", "{5698D830-3B68-ECB0-9ECC-EC13D06CC2EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vidsnap.Worker.AtualizaStatusProcessamento", "src\Driving\Vidsnap.Worker.AtualizaStatus\Vidsnap.Worker.AtualizaStatusProcessamento\Vidsnap.Worker.AtualizaStatusProcessamento.csproj", "{E2CEB948-3C1E-416C-8980-4390021FE58D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{5698D830-3B68-ECB0-9ECC-EC13D06CC2EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5698D830-3B68-ECB0-9ECC-EC13D06CC2EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5698D830-3B68-ECB0-9ECC-EC13D06CC2EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2CEB948-3C1E-416C-8980-4390021FE58D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2CEB948-3C1E-416C-8980-4390021FE58D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2CEB948-3C1E-416C-8980-4390021FE58D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2CEB948-3C1E-416C-8980-4390021FE58D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +77,7 @@ Global
 		{83B2027E-F2EA-C0F4-D38A-271FCD605EF6} = {A87CD217-24D4-4EC2-8AF7-186E0BDADF97}
 		{7CB24C38-157B-8691-811B-F94CADDA8E0F} = {A87CD217-24D4-4EC2-8AF7-186E0BDADF97}
 		{5698D830-3B68-ECB0-9ECC-EC13D06CC2EE} = {A87CD217-24D4-4EC2-8AF7-186E0BDADF97}
+		{E2CEB948-3C1E-416C-8980-4390021FE58D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5A47494A-0EB3-41A1-92B4-8FEE2919FA9C}
