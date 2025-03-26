@@ -49,50 +49,7 @@ namespace Vidsnap.Application.UseCases
             {
                 return new ResultadoOperacao<NovoVideoResponse>(ex);
             }
-        }
-
-        public async Task<ResultadoOperacao> AtualizarStatusDeProcessamentoAsync(Guid idVideo, AtualizaStatusVideoRequest atualizaStatusVideoRequest)
-        {
-            try
-            {
-                if (Enum.TryParse(atualizaStatusVideoRequest.NovoStatus, true, out Status status))
-                {
-                    var video = await _videoRepository.ObterPorIdAsync(idVideo);
-
-                    if (video is null)
-                    {
-                        return new ResultadoOperacao("Video não encontrado!");
-                    }
-
-                    if (video.VideoStatuses.Any(vs => vs.Status == status))
-                    {
-                        return new ResultadoOperacao($"O vídeo {idVideo} já chegou no status {status}");
-                    }
-
-                    video.AtualizarStatus(status);
-
-                    //Somente inclui a url do zip se ela for não nula e o status for FinalizadoComSucesso
-                    if (!string.IsNullOrEmpty(atualizaStatusVideoRequest.UrlZip)
-                        && !string.IsNullOrEmpty(atualizaStatusVideoRequest.UrlImagem)
-                        && status == Status.FinalizadoComSucesso)
-                    {
-                        video.IncluirURLs(atualizaStatusVideoRequest.UrlZip, atualizaStatusVideoRequest.UrlImagem);
-                    }
-
-                    await _videoRepository.AtualizarStatusProcessamentoAsync(video, status);
-
-                    return new ResultadoOperacao();
-                }
-                else
-                {
-                    return new ResultadoOperacao("Status inválido!");
-                }
-            }
-            catch (Exception ex) 
-            {
-                return new ResultadoOperacao(ex);
-            }
-        }
+        }        
 
         #region Private Methods
 
