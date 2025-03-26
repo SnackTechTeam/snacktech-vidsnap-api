@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.SQS" Version="3.7.400.120" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Vidsnap.Application\Vidsnap.Application.csproj" />
+    <ProjectReference Include="..\..\Core\Vidsnap.Domain\Vidsnap.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
