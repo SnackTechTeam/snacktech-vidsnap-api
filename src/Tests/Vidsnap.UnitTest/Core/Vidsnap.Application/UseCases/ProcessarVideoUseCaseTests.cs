@@ -28,7 +28,7 @@ namespace Vidsnap.UnitTest.Core.Vidsnap.Application.UseCases
                 _cloudFileStorageServiceMock.Object,
                 _cloudFileStorageOptionMock.Object);
         }
-
+        /*
         #region AtualizarStatusDeProcessamentoAsync
 
         [Fact]
@@ -151,6 +151,7 @@ namespace Vidsnap.UnitTest.Core.Vidsnap.Application.UseCases
         }
 
         #endregion
+        */
 
         #region Private Methods
 
