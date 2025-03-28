@@ -20,7 +20,7 @@ namespace Vidsnap.Api.Configuration
 
         public static IServiceCollection AddApplicationValidators(this IServiceCollection services)
         {
-            services.AddValidatorsFromAssemblyContaining<AtualizaStatusVideoRequestValidator>();
+            services.AddValidatorsFromAssemblyContaining<NovoVideoRequestValidator>();
             // Adiciona o suporte ao FluentValidation para validação automática
             services.AddFluentValidationAutoValidation();
 
