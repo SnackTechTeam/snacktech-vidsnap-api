@@ -1,11 +1,13 @@
+using System.Reflection;
 using Vidsnap.Application.Ports.Inbound;
 
 namespace Vidsnap.Worker.AtualizaStatusProcessamento
 {
-    public class Worker(IServiceProvider serviceProvider, IHostApplicationLifetime lifetime) : BackgroundService
+    public class Worker(IServiceProvider serviceProvider, IHostApplicationLifetime lifetime, ILogger<Worker> logger) : BackgroundService
     {
         private readonly IServiceProvider _serviceProvider = serviceProvider;
         private readonly IHostApplicationLifetime _lifetime = lifetime;
+        private readonly ILogger<Worker> _logger = logger;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -28,6 +30,8 @@ namespace Vidsnap.Worker.AtualizaStatusProcessamento
                 }
                 catch (Exception ex) 
                 {
+                    _logger.LogError(ex, "Erro ao executar o Worker {Assembly}", Assembly.GetExecutingAssembly().GetName().Name!);
+                    _lifetime.StopApplication();
                 }
             }
         }
