@@ -43,6 +43,7 @@ namespace Vidsnap.Application.Extensions.Entities
                 video.Tamanho,
                 video.Duracao,
                 video.URLZip,
+                video.URLImagem,
                 video.DataInclusao,
                 video.StatusAtual.ToString(),
                 videoStatuses

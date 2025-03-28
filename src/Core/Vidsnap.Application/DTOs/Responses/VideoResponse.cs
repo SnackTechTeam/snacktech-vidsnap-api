@@ -7,7 +7,8 @@
         string Extensao,
         int Tamanho,
         int Duracao,
-        string? URLZipe,
+        string? URLZip,
+        string? URLImagem,
         DateTime DataInclusao,
         string StatusAtual,
         IReadOnlyList<VideoStatusResponse> StatusHistory
