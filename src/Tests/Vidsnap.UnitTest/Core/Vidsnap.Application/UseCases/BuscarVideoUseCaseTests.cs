@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Moq;
+using Vidsnap.Application.DTOs.Settings;
 using Vidsnap.Application.UseCases;
 using Vidsnap.Domain.Entities;
 using Vidsnap.Domain.Ports.Outbound;
@@ -10,11 +12,13 @@ namespace Vidsnap.UnitTest.Core.Vidsnap.Application.UseCases
     {
         private readonly Mock<IVideoRepository> _videoRepositoryMock;
         private readonly BuscarVideosUseCase _buscarVideoUseCase;
+        private readonly Mock<IOptions<CloudFileStorageSettings>> _cloudFileStorageOptionMock;
 
         public BuscarVideoUseCaseTests()
         {
             _videoRepositoryMock = new Mock<IVideoRepository>();
-            _buscarVideoUseCase = new BuscarVideosUseCase(_videoRepositoryMock.Object);
+            _cloudFileStorageOptionMock = new Mock<IOptions<CloudFileStorageSettings>>();
+            _buscarVideoUseCase = new BuscarVideosUseCase(_videoRepositoryMock.Object, _cloudFileStorageOptionMock.Object);
         }
 
         #region ObterVideosDoUsuarioAsync

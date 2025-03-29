@@ -7,10 +7,12 @@
         string Extensao,
         int Tamanho,
         int Duracao,
-        string? URLZip,
-        string? URLImagem,
         DateTime DataInclusao,
         string StatusAtual,
         IReadOnlyList<VideoStatusResponse> StatusHistory
-    );    
+    )
+    {
+        public string? URLZip { get; set; }
+        public string? URLImagem { get; set; }
+    }    
 }

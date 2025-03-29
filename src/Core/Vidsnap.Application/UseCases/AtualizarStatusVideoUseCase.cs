@@ -40,6 +40,8 @@ namespace Vidsnap.Application.UseCases
                             //Mode para a DLQ quando o vídeo não é encontrado no banco de dados
                             //ou quando o vídeo já tem o status que está tentando atualizar
                             await _messageQueueService.MoverParaDlqAsync(queueMessage, cancellationToken);
+                            _logger.LogWarning("Mensagem enviada para DLQ pois o vídeo não existe ou seu status está repedido: {Mensagem}",
+                                JsonSerializer.Serialize(queueMessage));
                             continue;
                         }
 
@@ -61,6 +63,8 @@ namespace Vidsnap.Application.UseCases
                     {
                         //Move para a DLQ quando o status não é reconhecido
                         await _messageQueueService.MoverParaDlqAsync(queueMessage, cancellationToken);
+                        _logger.LogWarning("Mensagem inválida: {Mensagem} \nErros: {Erros}",
+                                JsonSerializer.Serialize(queueMessage), JsonSerializer.Serialize(validationResult.Errors));
                     }
                 }
                 catch(Exception ex)

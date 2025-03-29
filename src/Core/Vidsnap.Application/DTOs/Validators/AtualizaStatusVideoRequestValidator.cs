@@ -13,7 +13,7 @@ namespace Vidsnap.Application.DTOs.Validators
 
             RuleFor(x => x.Status)
                 .NotEmpty().WithMessage("O Status é obrigatório.")
-                .Must(status => Enum.TryParse(typeof(Status), status, out _))
+                .Must(status => Enum.TryParse(typeof(Status), status, out _))                
                 .WithMessage("O Status informado é inválido.");
 
             RuleFor(x => x.UrlZip)

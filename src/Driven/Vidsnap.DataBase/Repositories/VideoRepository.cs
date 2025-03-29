@@ -38,9 +38,15 @@ namespace Vidsnap.DataBase.Repositories
 
             var videoEntry = _appDbContext.Entry(video);
             videoEntry.Property(v => v.StatusAtual).IsModified = true;
+            
             if (video.URLZip is not null)
             {
                 videoEntry.Property(v => v.URLZip).IsModified = true;
+            }
+
+            if (video.URLImagem is not null)
+            {
+                videoEntry.Property(v => v.URLImagem).IsModified = true;
             }
 
             _appDbContext.Entry(video.VideoStatuses.First(vs => vs.Status == newStatus)).State = EntityState.Added;
