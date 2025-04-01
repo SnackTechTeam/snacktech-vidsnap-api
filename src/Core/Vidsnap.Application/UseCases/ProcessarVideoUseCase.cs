@@ -55,7 +55,7 @@ namespace Vidsnap.Application.UseCases
 
         private async Task<string> ObterUrlPreAssinadaAsync(Guid idUsuario, Guid? idVideo, string nomeArquivo)
         {
-            var presignedUrl = await _cloudFileStorageService.GetPreSignedURLAsync(
+            var presignedUrl = await _cloudFileStorageService.GetUploadPreSignedURLAsync(
                     _cloudFileStorageSettings.ContainerName,
                     _cloudFileStorageSettings.TimeoutDuration,
                     idUsuario,
