@@ -44,14 +44,9 @@ namespace Vidsnap.Domain.Entities
 
         public void IncluirURLs(string urlZip, string urlImagem)
         {
-            if (!string.IsNullOrEmpty(URLZip))
+            if (!string.IsNullOrEmpty(URLZip) || !string.IsNullOrEmpty(URLImagem))
             {
-                throw new InvalidOperationException($"{nameof(URLZip)} já foi definida e não pode ser modificada.");
-            }
-
-            if (!string.IsNullOrEmpty(URLImagem))
-            {
-                throw new InvalidOperationException($"{nameof(URLImagem)} já foi definida e não pode ser modificada.");
+                throw new InvalidOperationException($"URLs já foram definidas e não podem ser modificadas.");
             }
 
             if (StatusAtual != Status.FinalizadoComSucesso)

@@ -33,6 +33,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Core\Vidsnap.Application\Vidsnap.Application.csproj" />
+	  <ProjectReference Include="..\..\Core\Vidsnap.Domain\Vidsnap.Domain.csproj" />
 	  <ProjectReference Include="..\..\Driven\Vidsnap.DataBase\Vidsnap.DataBase.csproj" />
 	</ItemGroup>
 
