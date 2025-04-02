@@ -20,8 +20,8 @@ namespace Vidsnap.Application.DTOs.Validators
 
             RuleFor(v => v.Extensao)
                 .NotEmpty().WithMessage("A Extensão do vídeo é obrigatória.")
-                .Must(ext => new[] { ".mp4", ".avi", ".mov", ".mkv", ".jpg" }.Contains(ext.ToLower()))
-                .WithMessage("A Extensão deve ser um dos formatos suportados: .mp4, .avi, .mov, .mkv");
+                .Must(ext => ext != null && new[] { "mp4", "avi", "mov", "mkv", "jpg" }.Contains(ext.ToLower()))
+                .WithMessage("A Extensão deve ser um dos formatos suportados: mp4, avi, mov, mkv");
 
             RuleFor(v => v.Tamanho)
                 .GreaterThan(0).WithMessage("O Tamanho do vídeo deve ser maior que zero.");

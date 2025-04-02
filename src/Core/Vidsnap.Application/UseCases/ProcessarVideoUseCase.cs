@@ -17,20 +17,6 @@ namespace Vidsnap.Application.UseCases
         private readonly ICloudFileStorageService _cloudFileStorageService = cloudFileStorageService;
         private readonly CloudFileStorageSettings _cloudFileStorageSettings = cloudFileStorageOption.Value;
 
-        public async Task<ResultadoOperacao<string>> GerarUrlPreAssinadaParaUpload(UrlPreAssinadaRequest urlPreAssinadaRequest)
-        {
-            try
-            {
-                var presignedUrl = await ObterUrlPreAssinadaAsync(urlPreAssinadaRequest.IdUsuario, null, urlPreAssinadaRequest.NomeArquivo);
-
-                return new ResultadoOperacao<string>(presignedUrl);
-            }
-            catch (Exception ex)
-            {
-                return new ResultadoOperacao<string>(ex);
-            }
-        }
-
         public async Task<ResultadoOperacao<NovoVideoResponse>> EnviarVideoParaProcessamentoAsync(NovoVideoRequest novoVideoRequest)
         {
             try
