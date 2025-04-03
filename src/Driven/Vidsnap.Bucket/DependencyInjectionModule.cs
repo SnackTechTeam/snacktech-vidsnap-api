@@ -1,12 +1,14 @@
 ﻿using Amazon.S3;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 using Vidsnap.Application.DTOs.Settings;
 using Vidsnap.Domain.Ports.Outbound;
 using Vidsnap.S3Bucket.Services;
 
 namespace Vidsnap.S3Bucket
 {
+    [ExcludeFromCodeCoverage]
     public static class DependencyInjectionModule
     {
         public static IServiceCollection AddAdapterAmazonS3Bucket(this IServiceCollection services, IConfiguration configuration)
