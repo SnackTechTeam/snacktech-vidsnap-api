@@ -138,7 +138,7 @@ namespace Vidsnap.UnitTest.Core.Vidsnap.Application.UseCases
 
         private static AtualizaStatusVideoRequest CriaRequestValido()
         {
-            return new(Guid.NewGuid(), "FinalizadoComSucesso", "/video.zip", "/video.jpg");
+            return new(Guid.NewGuid(), "FinalizadoComSucesso", "s3://video.zip", "s3://video.jpg");
         }
     }
 }

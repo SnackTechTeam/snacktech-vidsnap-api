@@ -53,7 +53,9 @@
         public static string AgainstInvalidUrl(string url, string paramName)
         {
             if (!Uri.TryCreate(url, UriKind.Absolute, out var uriResult) ||
-                uriResult.Scheme != Uri.UriSchemeHttp && uriResult.Scheme != Uri.UriSchemeHttps)
+                (uriResult.Scheme != Uri.UriSchemeHttp && 
+                uriResult.Scheme != Uri.UriSchemeHttps &&
+                uriResult.Scheme != "s3"))
             {
                 throw new ArgumentException($"{paramName} não é uma URL válida.", paramName);
             }

@@ -1,6 +1,4 @@
-﻿using Vidsnap.Application.DTOs.Responses;
-
-namespace Vidsnap.Application.Ports.Inbound
+﻿namespace Vidsnap.Application.Ports.Inbound
 {
     public interface IAtualizarStatusVideoUseCase
     {

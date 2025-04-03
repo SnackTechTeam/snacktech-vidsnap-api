@@ -4,7 +4,6 @@ using Vidsnap.Application.DTOs.Responses;
 using Vidsnap.Application.DTOs.Settings;
 using Vidsnap.Application.Extensions.Entities;
 using Vidsnap.Application.Ports.Inbound;
-using Vidsnap.Domain.Enums;
 using Vidsnap.Domain.Ports.Outbound;
 
 namespace Vidsnap.Application.UseCases
@@ -35,7 +34,7 @@ namespace Vidsnap.Application.UseCases
             {
                 return new ResultadoOperacao<NovoVideoResponse>(ex);
             }
-        }        
+        }
 
         #region Private Methods
 

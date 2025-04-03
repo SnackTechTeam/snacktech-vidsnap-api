@@ -55,9 +55,9 @@ namespace Vidsnap.Domain.Entities
             }
 
             CommonGuards.AgainstNullOrWhiteSpace(urlZip, nameof(urlZip));
-            //CommonGuards.AgainstInvalidUrl(urlZip, nameof(urlZip));
+            CommonGuards.AgainstInvalidUrl(urlZip, nameof(urlZip));
             CommonGuards.AgainstNullOrWhiteSpace(urlImagem, nameof(urlImagem));
-            //CommonGuards.AgainstInvalidUrl(urlImagem, nameof(urlImagem));
+            CommonGuards.AgainstInvalidUrl(urlImagem, nameof(urlImagem));
 
             URLZip = urlZip;
             URLImagem = urlImagem;
