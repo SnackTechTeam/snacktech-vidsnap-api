@@ -133,46 +133,83 @@ jobs:
         run: |
           aws eks --region ${{ vars.AWS_REGION }} update-kubeconfig --name ${{ vars.PROJECT_NAME }}
       
-    #   - name: Create/Update Secrets
-    #     env:
-    #       DB_INSTANCE_PEDIDOS: ${{ secrets.DB_INSTANCE_PEDIDOS }}
-    #       DB_PASSWORD_PEDIDOS: ${{ secrets.DB_PASSWORD_PEDIDOS }}
-    #       DB_UID_PEDIDOS: ${{ secrets.DB_UID_PEDIDOS }}
-    #       DB_PORT: ${{ vars.DB_PORT }}
-    #     run: |
-    #       SECRET_NAME="api-orders-secret"
-    #       CONNECTION_STRING="Server=${{ env.DB_INSTANCE_PEDIDOS }},${{ env.DB_PORT }};Database=SnackTechOrdersDb;User=${{ env.DB_UID_PEDIDOS }};Password=${{ env.DB_PASSWORD_PEDIDOS }};TrustServerCertificate=True"
+      - name: Create/Update DB Connection Secret
+        env:
+          DB_INSTANCE: ${{ secrets.VIDEOS_DB_INSTANCE }}
+          DB_PASSWORD: ${{ secrets.VIDEOS_DB_PASSWORD }}
+          DB_UID: ${{ secrets.VIDEOS_DB_USERNAME }}
+          DB_NAME: ${{ vars.VIDEOS_DB_NAME }}
+          DB_PORT: 1433
+        run: |
+          SECRET_NAME="videos-db-connection-secret"
+          CONNECTION_STRING="Server=${{ env.DB_INSTANCE }},${{ env.DB_PORT }};Database=${{ env.DB_NAME }};User=${{ env.DB_UID }};Password=${{ env.DB_PASSWORD }};TrustServerCertificate=True"
       
-    #       if kubectl get secret "$SECRET_NAME" > /dev/null 2>&1; then
-    #         kubectl delete secret "$SECRET_NAME" 
-    #       fi
+          if kubectl get secret "$SECRET_NAME" > /dev/null 2>&1; then
+            kubectl delete secret "$SECRET_NAME" 
+          fi
       
-    #       kubectl create secret generic "$SECRET_NAME"  \
-    #         --from-literal=ConnectionStrings__DefaultConnection="$CONNECTION_STRING"
+          kubectl create secret generic "$SECRET_NAME"  \
+            --from-literal=connection-string="$CONNECTION_STRING"
       
-    #   - name: Create/Update ConfigMap
-    #     env:
-    #       PRODUTO_API_URL: "http://api-products-service:8080/api"
-    #       PAGAMENTO_API_URL: "http://api-payment-service:8080/api"
-    #     run: |
-    #       CONFIGMAP_NAME="api-orders-configmap"
+      - name: Create/Update AWS Secret
+        env:
+          ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          TOKEN: ${{ secrets.AWS_SECRET_ACCESS_TOKEN }}
+          REGION: ${{ vars.AWS_REGION }}
+        run: |
+          SECRET_NAME="aws-credential-secret"
       
-    #       if kubectl get configmap "$CONFIGMAP_NAME"  > /dev/null 2>&1; then
-    #         kubectl delete configmap "$CONFIGMAP_NAME" 
-    #       fi
+          if kubectl get secret "$SECRET_NAME" > /dev/null 2>&1; then
+            kubectl delete secret "$SECRET_NAME" 
+          fi
       
-    #       kubectl create configmap "$CONFIGMAP_NAME" \
-    #         --from-literal=ProdutoApiSettings__EnableIntegration="true" \
-    #         --from-literal=ProdutoApiSettings__UrlBase="$PRODUTO_API_URL" \
-    #         --from-literal=PagamentoApiSettings__EnableIntegration="true" \
-    #         --from-literal=PagamentoApiSettings__UrlBase="$PAGAMENTO_API_URL"
-          
-    #   - name: Replace ECR image string value
-    #     env:
-    #       IMAGE_URI: ${{ steps.build-image.outputs.image }}
-    #     run: |
-    #       yq e '.spec.template.spec.containers[0].image = "'"$IMAGE_URI"'"' -i k8s/01-orders-api-deployment.yaml || { echo "Error updating ecr_image_url_repo_tag value"; exit 1; }
+          kubectl create secret generic "$SECRET_NAME"  \
+            --from-literal=access-key="${{ env.ACCESS_KEY }}" \
+            --from-literal=secret-key="${{ env.SECRET_KEY }}" \
+            --from-literal=session-token="${{ env.TOKEN }}" \
+            --from-literal=region="${{ env.REGION }}" 
       
-    #   - name: Deploy to EKS
-    #     run: |
-    #       kubectl apply -f k8s
+      - name: Create/Update ConfigMap SQS
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          ID_VOCLABS: ${{ secrets.AWS_ACCOUNT_ID_VOCLABS }}
+          SQS_PROCESS_NAME: ${{ vars.VIDEOS_PROCESS_SQS_NAME }}
+          SQS_STATUS_NAME: ${{ vars.VIDEOS_STATUS_SQS_NAME }}
+        run: |
+          CONFIGMAP_NAME="sqs-queues-configmap"
+      
+          if kubectl get configmap "$CONFIGMAP_NAME"  > /dev/null 2>&1; then
+            kubectl delete configmap "$CONFIGMAP_NAME" 
+          fi
+      
+          kubectl create configmap "$CONFIGMAP_NAME" \
+            --from-literal=videos-process-queue="https://sqs.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ID_VOCLABS }}/${{ env.SQS_PROCESS_NAME }}" \
+            --from-literal=videos-process-queue-dlq="https://sqs.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ID_VOCLABS }}/${{ env.SQS_PROCESS_NAME }}-dlq" \
+            --from-literal=videos-status-queue="https://sqs.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ID_VOCLABS }}/${{ env.SQS_STATUS_NAME }}" \
+            --from-literal=videos-status-queue-dlq="https://sqs.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ID_VOCLABS }}/${{ env.SQS_STATUS_NAME }}-dlq" 
+      
+      - name: Create/Update ConfigMap API Videos
+        env:
+          BUCKET: ${{ vars.VIDEOS_BUCKET_NAME }}
+          TIMEOUT_DEFAULT: 1 
+        run: |
+          CONFIGMAP_NAME="api-videos-configmap"
+      
+          if kubectl get configmap "$CONFIGMAP_NAME"  > /dev/null 2>&1; then
+            kubectl delete configmap "$CONFIGMAP_NAME" 
+          fi
+      
+          kubectl create configmap "$CONFIGMAP_NAME" \
+            --from-literal=bucket-name="${{ env.BUCKET }}" \
+            --from-literal=timeout-default="${{ env.TIMEOUT_DEFAULT }}"
+            
+      # - name: Replace ECR image string value
+      #   env:
+      #     IMAGE_URI: ${{ steps.build-image.outputs.image }}
+      #   run: |
+      #     yq e '.spec.template.spec.containers[0].image = "'"$IMAGE_URI"'"' -i infra/k8s/01-api-deployment.yaml || { echo "Error updating ecr_image_url_repo_tag value"; exit 1; }
+      
+      # - name: Deploy to EKS
+      #   run: |
+      #     kubectl apply -f infra/k8s

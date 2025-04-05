@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-videos-deployment
+spec:
+  selector:
+    matchLabels:
+      app: api-videos-pod
+  template:
+    metadata:
+      labels:
+        app: api-videos-pod
+    spec:
+      containers:
+        - name: api-videos-container
+          image: # valor será incluido no pipeline
+          envFrom: # Use envFrom to load from ConfigMap and Secret
+            - secretRef:
+                name: api-videos-secret
+            - configMapRef:
+                name: api-videos-configmap
+
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "196Mi"
+              cpu: "200m"
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /api/health/live
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health/ready
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 3
