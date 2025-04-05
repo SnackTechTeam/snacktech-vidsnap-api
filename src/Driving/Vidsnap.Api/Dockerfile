@@ -10,9 +10,7 @@ EXPOSE 8081
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-
 ARG BUILD_CONFIGURATION=Release
-
 WORKDIR /src
 
 COPY ["Driving/Vidsnap.Api/Vidsnap.Api.csproj", "Driving/Vidsnap.Api/"]
@@ -20,6 +18,7 @@ COPY ["Core/Vidsnap.Application/Vidsnap.Application.csproj", "Core/Vidsnap.Appli
 COPY ["Core/Vidsnap.Domain/Vidsnap.Domain.csproj", "Core/Vidsnap.Domain/"]
 COPY ["Driven/Vidsnap.Bucket/Vidsnap.S3Bucket.csproj", "Driven/Vidsnap.Bucket/"]
 COPY ["Driven/Vidsnap.DataBase/Vidsnap.DataBase.csproj", "Driven/Vidsnap.DataBase/"]
+COPY ["Driven/Vidsnap.SQS/Vidsnap.SQS.csproj", "Driven/Vidsnap.SQS/"]
 
 RUN dotnet restore "./Driving/Vidsnap.Api/Vidsnap.Api.csproj"
 
