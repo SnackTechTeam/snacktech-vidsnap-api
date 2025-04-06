@@ -1,4 +1,6 @@
-﻿using Amazon.S3;
+﻿using Amazon;
+using Amazon.Runtime;
+using Amazon.S3;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
@@ -17,8 +19,19 @@ namespace Vidsnap.S3Bucket
                 configuration.GetSection("AWS:CloudFileStorage")
             );
 
-            services.AddDefaultAWSOptions(configuration.GetAWSOptions());
-            services.AddSingleton<IAmazonS3, AmazonS3Client>();
+            var awsDefaultSettings = configuration.GetSection("AWS").Get<AwsDefaultSettings>()
+                ?? throw new ArgumentNullException(nameof(configuration), "AWS configuration not found.");
+
+            services.AddSingleton<IAmazonS3>(serviceProvider =>
+            {
+                var awsCredentials = new SessionAWSCredentials(
+                    awsDefaultSettings.Credentials.AccessKey,
+                    awsDefaultSettings.Credentials.SecretKey,
+                    awsDefaultSettings.Credentials.SessionToken
+                );
+
+                return new AmazonS3Client(awsCredentials, RegionEndpoint.GetBySystemName(awsDefaultSettings.Region));
+            });
 
             services.AddTransient<ICloudFileStorageService, S3Service>();
 
