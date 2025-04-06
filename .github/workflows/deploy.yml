@@ -204,20 +204,18 @@ jobs:
         run: |
           aws eks --region ${{ vars.AWS_REGION }} update-kubeconfig --name ${{ vars.PROJECT_NAME }}
       
-      - name: Create/Update ConfigMap API Videos
+      - name: Create/Update ConfigMap Worker Status Videos
         env:
-          BUCKET: ${{ vars.VIDEOS_BUCKET_NAME }}
-          TIMEOUT_DEFAULT: 1 
+          MAX_MESSAGES: 5 
         run: |
-          CONFIGMAP_NAME="api-videos-configmap"
+          CONFIGMAP_NAME="worker-videos-status-configmap"
       
           if kubectl get configmap "$CONFIGMAP_NAME"  > /dev/null 2>&1; then
             kubectl delete configmap "$CONFIGMAP_NAME" 
           fi
       
           kubectl create configmap "$CONFIGMAP_NAME" \
-            --from-literal=bucket-name="${{ env.BUCKET }}" \
-            --from-literal=timeout-default="${{ env.TIMEOUT_DEFAULT }}"
+            --from-literal=max-messages-limit="${{ env.MAX_MESSAGES }}" 
             
       - name: Replace ECR image string value
         env:

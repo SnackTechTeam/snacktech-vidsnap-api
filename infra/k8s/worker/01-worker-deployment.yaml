@@ -40,16 +40,21 @@ spec:
                 secretKeyRef:
                   name: aws-credential-secret
                   key: region
-            - name: SQS__QueueURL
+            - name: AWS__Queues__QueueURL
               valueFrom:
                 configMapKeyRef:
                   name: sqs-queues-configmap
                   key: videos-status-queue
-            - name: SQS__DlqQueueURL
+            - name: AWS__Queues__DlqQueueURL
               valueFrom:
                 configMapKeyRef:
                   name: sqs-queues-configmap
                   key: videos-status-queue-dlq
+            - name: AWS__Queues__MaxNumberOfMessages
+              valueFrom:
+                configMapKeyRef:
+                  name: worker-videos-status-configmap
+                  key: max-messages-limit
 
           resources:
             requests:
