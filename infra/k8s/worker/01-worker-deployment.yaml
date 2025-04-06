@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-videos-deployment
+  name: worker-videos-status-deployment
 spec:
   selector:
     matchLabels:
-      app: api-videos-pod
+      app: worker-videos-status-pod
   template:
     metadata:
       labels:
-        app: api-videos-pod
+        app: worker-videos-status-pod
     spec:
       containers:
-        - name: api-videos-container
+        - name: worker-videos-status-container
           image: # valor será incluido no pipeline
           env:
             - name: ConnectionStrings__DefaultConnection
@@ -40,36 +40,17 @@ spec:
                 secretKeyRef:
                   name: aws-credential-secret
                   key: region
-            - name: AWS__CloudFileStorage__ContainerName
-              valueFrom:
-                configMapKeyRef:
-                  name: api-videos-configmap
-                  key: bucket-name
-            - name: AWS__CloudFileStorage__TimeoutDuration
-              valueFrom:
-                configMapKeyRef:
-                  name: api-videos-configmap
-                  key: timeout-default
-            - name: SQS__VideosProcessQueue
-              valueFrom:
-                configMapKeyRef:
-                  name: sqs-queues-configmap
-                  key: videos-process-queue
-            - name: SQS__VideosProcessQueueDlq
-              valueFrom:
-                configMapKeyRef:
-                  name: sqs-queues-configmap
-                  key: videos-process-queue-dlq
-            - name: SQS__VideosStatusQueue
+            - name: SQS__QueueURL
               valueFrom:
                 configMapKeyRef:
                   name: sqs-queues-configmap
                   key: videos-status-queue
-            - name: SQS__VideosStatusQueueDlq
+            - name: SQS__DlqQueueURL
               valueFrom:
                 configMapKeyRef:
                   name: sqs-queues-configmap
                   key: videos-status-queue-dlq
+
           resources:
             requests:
               memory: "96Mi"
@@ -77,20 +58,4 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-          ports:
-            - containerPort: 8080
-          livenessProbe:
-            httpGet:
-              path: /api/health/live
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              path: /api/health/ready
-              port: 8080
-            initialDelaySeconds: 15
-            periodSeconds: 5
-            timeoutSeconds: 3
+         
