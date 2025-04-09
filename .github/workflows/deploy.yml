@@ -136,7 +136,7 @@ jobs:
       - name: Create/Update ConfigMap API Videos
         env:
           BUCKET: ${{ vars.VIDEOS_BUCKET_NAME }}
-          TIMEOUT_DEFAULT: 1 
+          TIMEOUT_DEFAULT: 5 
         run: |
           CONFIGMAP_NAME="api-videos-configmap"
       
