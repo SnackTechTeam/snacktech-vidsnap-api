@@ -23,6 +23,13 @@ namespace Vidsnap.DataBase.Repositories
                 FirstOrDefaultAsync(v => v.Id == idVideo);
         }
 
+        public async Task<Video?> ObterPorUsuarioAsync(Guid idVideo, Guid idUsuario)
+        {
+            return await _appDbContext.Videos.
+                AsNoTracking().
+                FirstOrDefaultAsync(v => v.Id == idVideo && v.IdUsuario == idUsuario);
+        }
+
         public async Task<IReadOnlyList<Video>> ObterTodosDoUsuarioAsync(Guid idUsuario)
         {
             return await _appDbContext.Videos
@@ -53,6 +60,6 @@ namespace Vidsnap.DataBase.Repositories
             
             var entriesUpdated = await _appDbContext.SaveChangesAsync();
             return entriesUpdated;
-        }        
+        }
     }
 }

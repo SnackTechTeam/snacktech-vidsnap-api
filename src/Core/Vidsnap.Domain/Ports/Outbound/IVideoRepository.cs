@@ -7,6 +7,7 @@ namespace Vidsnap.Domain.Ports.Outbound
     {
         Task CriarAsync(Video video);
         Task<Video?> ObterPorIdAsync(Guid idVideo);
+        Task<Video?> ObterPorUsuarioAsync(Guid idVideo, Guid idUsuario);
         Task<IReadOnlyList<Video>> ObterTodosDoUsuarioAsync(Guid idUsuario);
         Task<int> AtualizarStatusProcessamentoAsync(Video video, Status newStatus);
     }

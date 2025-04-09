@@ -1,6 +1,7 @@
 ﻿using Vidsnap.Application.DTOs.Requests;
 using Vidsnap.Application.DTOs.Responses;
 using Vidsnap.Domain.Entities;
+using Vidsnap.Domain.Guards;
 
 namespace Vidsnap.Application.Extensions.Entities
 {
@@ -45,11 +46,7 @@ namespace Vidsnap.Application.Extensions.Entities
                 video.DataInclusao,
                 video.StatusAtual.ToString(),
                 videoStatuses
-            )
-            {
-                URLZip = video.URLZip,
-                URLImagem = video.URLImagem,
-            };            
+            );            
         }
 
         private static VideoStatusResponse ParaVideoStatusResponse(this VideoStatus videoStatus)

@@ -16,31 +16,6 @@ namespace Vidsnap.S3Bucket.Services
             string fileName
         )
         {
-            return await GeneratePreSignedURLAsync(storageName, timeoutDuration, idUsuario, idVideo, fileName, HttpVerb.PUT);
-        }
-
-        public async Task<string> GetDownloadPreSignedURLAsync(
-            string storageName, 
-            int timeoutDuration, 
-            Guid? idUsuario, 
-            Guid? idVideo, 
-            string fileName
-        )
-        {
-            return await GeneratePreSignedURLAsync(storageName, timeoutDuration, idUsuario, idVideo, fileName, HttpVerb.PUT);
-        }
-
-        #region
-        private async Task<string> GeneratePreSignedURLAsync(
-            string storageName,
-            int timeoutDuration,
-            Guid? idUsuario,
-            Guid? idVideo,
-            string fileName,
-            HttpVerb httpVerb
-        )
-        {
-
             var pastaBase = idUsuario.HasValue ? $"{idUsuario.Value}/" : string.Empty;
             var subPasta = idVideo.HasValue ? $"{idVideo.Value}/" : string.Empty;
 
@@ -48,15 +23,33 @@ namespace Vidsnap.S3Bucket.Services
             {
                 BucketName = storageName,
                 Key = $"{pastaBase}{subPasta}{fileName}",
-                Verb = httpVerb,
+                Verb = HttpVerb.PUT,
                 Expires = DateTime.UtcNow.AddMinutes(timeoutDuration),
                 ContentType = "application/octet-stream"
             };
 
             var urlString = await _s3Client.GetPreSignedURLAsync(request);
 
-            return urlString;
+            return urlString;            
         }
-        #endregion
+
+        public async Task<string> GetDownloadPreSignedURLAsync(
+            string storageName, 
+            int timeoutDuration,
+            string filePath
+        )
+        {
+            var request = new GetPreSignedUrlRequest()
+            {
+                BucketName = storageName,
+                Key = filePath,
+                Verb = HttpVerb.GET,
+                Expires = DateTime.UtcNow.AddMinutes(timeoutDuration)
+            };
+
+            var urlString = await _s3Client.GetPreSignedURLAsync(request);
+
+            return urlString;
+        }        
     }
 }

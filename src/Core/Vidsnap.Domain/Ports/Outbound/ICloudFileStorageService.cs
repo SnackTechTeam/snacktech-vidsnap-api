@@ -24,12 +24,10 @@
         /// <param name="timeoutDuration">Minutos que a URL será válida</param>
         /// <param name="idUsuario">Identificador do usuário que fará o download</param>
         /// <param name="idVideo">Identificador do vídeo cadastrado para download</param>
-        /// <param name="fileName">Nome do arquivo com sua extensão. Exemplo: video.mp4</param>
+        /// <param name="filePath">Diretório completo do arquivo com seu nome e extensão. Exemplo: videos/video.mp4</param>
         /// <returns>URL pré-assinada gerada com os parâmetros passados</returns>
         Task<string> GetDownloadPreSignedURLAsync(string storageName,
             int timeoutDuration,
-            Guid? idUsuario,
-            Guid? idVideo,
-            string fileName);
+            string filePath);
     }
 }
