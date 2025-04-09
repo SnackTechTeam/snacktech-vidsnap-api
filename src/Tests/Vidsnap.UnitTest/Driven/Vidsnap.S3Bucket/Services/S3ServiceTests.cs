@@ -49,24 +49,26 @@ namespace Vidsnap.UnitTest.Driven.Vidsnap.S3Bucket.Services
             // Arrange
             var storageName = "test-bucket";
             var timeoutDuration = 15;
-            var idUsuario = Guid.NewGuid();
-            var idVideo = Guid.NewGuid();
-            var fileName = "video.mp4";
+            var filePath = "teste/teste.mp4";
             var expectedUrl = "https://s3.amazonaws.com/test-bucket/video.mp4";
 
+            GetPreSignedUrlRequest? capturedRequest = null;
+
             _s3ClientMock.Setup(s3 => s3.GetPreSignedURLAsync(It.IsAny<GetPreSignedUrlRequest>()))
+                .Callback<GetPreSignedUrlRequest>(req => capturedRequest = req)
                 .ReturnsAsync(expectedUrl);
 
             // Act
-            var result = await _s3Service.GetDownloadPreSignedURLAsync(storageName, timeoutDuration, idUsuario, idVideo, fileName);
+            var result = await _s3Service.GetDownloadPreSignedURLAsync(storageName, timeoutDuration, filePath);
 
             // Assert
             result.Should().Be(expectedUrl);
-            _s3ClientMock.Verify(s3 => s3.GetPreSignedURLAsync(It.Is<GetPreSignedUrlRequest>(r =>
-                r.BucketName == storageName &&
-                r.Verb == HttpVerb.PUT &&
-                r.Key == $"{idUsuario}/{idVideo}/{fileName}" &&
-                r.Expires > DateTime.UtcNow)), Times.Once);
+
+            capturedRequest.Should().NotBeNull();
+            capturedRequest!.BucketName.Should().Be(storageName);
+            capturedRequest.Key.Should().Be(filePath);
+            capturedRequest.Verb.Should().Be(HttpVerb.GET);
+            capturedRequest.Expires.Should().BeAfter(DateTime.UtcNow);
         }
     }
 }

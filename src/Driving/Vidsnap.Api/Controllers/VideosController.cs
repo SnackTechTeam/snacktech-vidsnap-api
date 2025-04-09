@@ -66,7 +66,7 @@ namespace Vidsnap.Api.Controllers
         /// <returns>Um <see cref="IActionResult"/> representando o resultado da operação.</returns>
         [HttpGet("/usuarios/{id-usuario}/{id-video}")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType<IReadOnlyList<VideoResponse>>(StatusCodes.Status200OK)]
+        [ProducesResponseType<IReadOnlyList<LinksDeDownloadResponse>>(StatusCodes.Status200OK)]
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Lista todos os vídeo cadastrados pelo usuário")]

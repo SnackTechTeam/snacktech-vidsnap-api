@@ -110,11 +110,7 @@ namespace Vidsnap.UnitTest.Driving.Vidsnap.API.Controllers
                         new("Recebido", DateTime.UtcNow.AddMinutes(-10)),
                         new("Finalizado", DateTime.UtcNow)
                     ]
-                )
-                {
-                    URLZip = "https://storage.com/video1.zip",
-                    URLImagem = "https://storage.com/video1.jpg"
-                },
+                ),
                 new(
                     Guid.NewGuid(), idUsuario, "video2.mp4", "mp4", 2000, 240, DateTime.UtcNow, "Processando",
                     [
@@ -122,10 +118,6 @@ namespace Vidsnap.UnitTest.Driving.Vidsnap.API.Controllers
                         new("Processando", DateTime.UtcNow)
                     ]
                 )
-                {
-                    URLZip = "https://storage.com/video2.zip",
-                    URLImagem = "https://storage.com/video2.jpg"
-                }
             };
 
             var resultadoOperacao = new ResultadoOperacao<IReadOnlyList<VideoResponse>>(videos);
@@ -173,6 +165,79 @@ namespace Vidsnap.UnitTest.Driving.Vidsnap.API.Controllers
 
             // Act
             var resultado = await _controller.ObterVideosPorUsuario(idUsuario) as ObjectResult;
+
+            // Assert
+            resultado.Should().NotBeNull();
+            resultado!.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+            var errorResponse = resultado.Value as ErrorResponse;
+            errorResponse.Should().NotBeNull();
+            errorResponse!.Message.Should().Be("Erro interno");
+        }
+
+        #endregion
+
+        #region ObterLinksDeDownloadDoVideo
+
+        [Fact]
+        public async Task ObterLinksDeDownloadDoVideo_DeveRetornarOk_QuandoVideoForEncontrado()
+        {
+            // Arrange
+            var idVideo = Guid.NewGuid();
+            var idUsuario = Guid.NewGuid();
+            var linksDeDownloadResponse = new LinksDeDownloadResponse(
+                idVideo,
+                "https://bucket/zip.zip",
+                "https://bucket/imagem.png",
+                DateTime.Now);
+            
+
+            var resultadoOperacao = new ResultadoOperacao<LinksDeDownloadResponse>(linksDeDownloadResponse);
+
+            _buscarVideosUseCaseMock.Setup(x => x.ObterLinksDeDownloadAsync(idVideo, idUsuario))
+                .ReturnsAsync(resultadoOperacao);
+
+            // Act
+            var resultado = await _controller.ObterLinksDeDownloadDoVideo(idUsuario, idVideo) as ObjectResult;
+
+            // Assert
+            resultado.Should().NotBeNull();
+            resultado!.StatusCode.Should().Be((int)HttpStatusCode.OK);
+            resultado.Value.Should().BeEquivalentTo(linksDeDownloadResponse);
+        }
+
+        [Fact]
+        public async Task ObterLinksDeDownloadDoVideo_DeveRetornarBadRequest_QuandoOperacaoFalhar()
+        {
+            // Arrange
+            var idVideo = Guid.NewGuid();
+            var idUsuario = Guid.NewGuid();
+            var resultadoOperacao = new ResultadoOperacao<LinksDeDownloadResponse>("Falha ao obter vídeo.", true);
+
+            _buscarVideosUseCaseMock.Setup(x => x.ObterLinksDeDownloadAsync(idVideo, idUsuario))
+                .ReturnsAsync(resultadoOperacao);
+
+            // Act
+            var resultado = await _controller.ObterLinksDeDownloadDoVideo(idUsuario, idVideo) as ObjectResult;
+
+            // Assert
+            resultado.Should().NotBeNull();
+            resultado!.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+            var errorResponse = resultado.Value as ErrorResponse;
+            errorResponse.Should().NotBeNull();
+            errorResponse!.Message.Should().Be("Falha ao obter vídeo.");
+        }
+
+        [Fact]
+        public async Task ObterLinksDeDownloadDoVideo_DeveRetornarInternalServerError_QuandoExcecaoForLancada()
+        {
+            // Arrange
+            var idVideo = Guid.NewGuid();
+            var idUsuario = Guid.NewGuid();
+            _buscarVideosUseCaseMock.Setup(x => x.ObterLinksDeDownloadAsync(idVideo, idUsuario))
+                .ThrowsAsync(new Exception("Erro interno"));
+
+            // Act
+            var resultado = await _controller.ObterLinksDeDownloadDoVideo(idUsuario, idVideo) as ObjectResult;
 
             // Assert
             resultado.Should().NotBeNull();

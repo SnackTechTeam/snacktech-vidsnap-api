@@ -93,6 +93,51 @@ namespace Vidsnap.UnitTest.Driven.Vidsnap.DataBase.Repositories
 
         #endregion
 
+        #region ObterPorIdAsync
+
+        [Fact]
+        public async Task ObterPorUsuarioAsync_QuandoIdExistir_DeveRetornarVideo()
+        {
+            //arrange
+            var options = CriarOpcoesEmMemoria();
+
+            using var appDbContext = new AppDbContext(options);
+            var repository = new VideoRepository(appDbContext);
+
+            var video = CriarVideoValido();
+            await appDbContext.Videos.AddAsync(video);
+            await appDbContext.SaveChangesAsync();
+
+            //act
+            var resultado = await repository.ObterPorUsuarioAsync(video.Id, video.IdUsuario);
+
+            //assert
+            resultado.Should().NotBeNull();
+            resultado.NomeVideo.Should().Be(video.NomeVideo);
+        }
+
+        [Fact]
+        public async Task ObterPorUsuarioAsync_QuandoIdNaoExistir_DeveRetornarNull()
+        {
+            //arrange
+            var options = CriarOpcoesEmMemoria();
+
+            using var appDbContext = new AppDbContext(options);
+            var repository = new VideoRepository(appDbContext);
+
+            var video = CriarVideoValido();
+            await appDbContext.Videos.AddAsync(video);
+            await appDbContext.SaveChangesAsync();
+
+            //act
+            var resultado = await repository.ObterPorUsuarioAsync(Guid.NewGuid(), Guid.NewGuid());
+
+            //assert
+            resultado.Should().BeNull();
+        }
+
+        #endregion
+
         #region ObterTodosDoUsuario
 
         [Fact]
