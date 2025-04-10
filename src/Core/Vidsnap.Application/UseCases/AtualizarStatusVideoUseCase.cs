@@ -35,12 +35,12 @@ namespace Vidsnap.Application.UseCases
                         var video = await _videoRepository.ObterPorIdAsync(queueMessage.MessageBody.IdVideo);
                         var status = Enum.Parse<Status>(queueMessage.MessageBody.Status, false);
 
-                        if (video is null || video.VideoStatuses.Any(vs => vs.Status == status))
+                        if (video is null || status <= video.StatusAtual)
                         {
-                            //Mode para a DLQ quando o vídeo não é encontrado no banco de dados
-                            //ou quando o vídeo já tem o status que está tentando atualizar
+                            //Move para a DLQ quando o vídeo não é encontrado no banco de dados
+                            //ou quando o status enviado é menor ou igual ao status atual do vídeo
                             await _messageQueueService.MoverParaDlqAsync(queueMessage, cancellationToken);
-                            _logger.LogWarning("Mensagem enviada para DLQ pois o vídeo não existe ou seu status está repedido: {Mensagem}",
+                            _logger.LogWarning("Mensagem enviada para DLQ pois o vídeo não existe ou o status enviado é menor ou igual ao status atual: {Mensagem}",
                                 JsonSerializer.Serialize(queueMessage));
                             continue;
                         }
