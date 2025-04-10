@@ -18,16 +18,17 @@ namespace Vidsnap.DataBase.Repositories
 
         public async Task<Video?> ObterPorIdAsync(Guid idVideo)
         {
-            return await _appDbContext.Videos.
-                AsNoTracking().
-                FirstOrDefaultAsync(v => v.Id == idVideo);
+            return await _appDbContext.Videos
+                .AsNoTracking()
+                .Include(v => v.VideoStatuses)
+                .FirstOrDefaultAsync(v => v.Id == idVideo);
         }
 
         public async Task<Video?> ObterPorUsuarioAsync(Guid idVideo, Guid idUsuario)
         {
-            return await _appDbContext.Videos.
-                AsNoTracking().
-                FirstOrDefaultAsync(v => v.Id == idVideo && v.IdUsuario == idUsuario);
+            return await _appDbContext.Videos
+                .AsNoTracking()
+                .FirstOrDefaultAsync(v => v.Id == idVideo && v.IdUsuario == idUsuario);
         }
 
         public async Task<IReadOnlyList<Video>> ObterTodosDoUsuarioAsync(Guid idUsuario)
