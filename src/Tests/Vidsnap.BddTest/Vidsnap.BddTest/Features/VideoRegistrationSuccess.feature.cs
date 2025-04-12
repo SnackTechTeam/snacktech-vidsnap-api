@@ -101,7 +101,7 @@ namespace Vidsnap.BddTest.Features
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Submitting a valid video should return 200 and a confirmation", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 3
-  this.ScenarioInitialize(scenarioInfo);
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
             {
@@ -110,14 +110,14 @@ namespace Vidsnap.BddTest.Features
             else
             {
                 await this.ScenarioStartAsync();
-                global::Reqnroll.Table table1 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table2 = new global::Reqnroll.Table(new string[] {
                             "IdUsuario",
                             "EmailUsuario",
                             "NomeVideo",
                             "Extensao",
                             "Tamanho",
                             "Duracao"});
-                table1.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "00000000-0000-0000-0000-000000000001",
                             "user@example.com",
                             "MeuVideo",
@@ -125,16 +125,16 @@ namespace Vidsnap.BddTest.Features
                             "100",
                             "60"});
 #line 4
-    await testRunner.GivenAsync("I have the following valid video data:", ((string)(null)), table1, "Given ");
+ await testRunner.GivenAsync("I have the following valid video data:", ((string)(null)), table2, "Given ");
 #line hidden
 #line 7
-    await testRunner.WhenAsync("I POST this data to \"api/videos\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("I POST this data to \"api/videos\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 8
-    await testRunner.ThenAsync("the response status code should be 200", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("the response status code should be 200", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 9
-    await testRunner.AndAsync("the response should contain a valid video registration confirmation", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("the response should contain a valid video registration confirmation", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

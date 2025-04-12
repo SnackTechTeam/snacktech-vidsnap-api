@@ -19,21 +19,21 @@ namespace Vidsnap.BddTest.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class VideoSubmissionValidationFeature : object, Xunit.IClassFixture<VideoSubmissionValidationFeature.FixtureData>, Xunit.IAsyncLifetime
+    public partial class VideoRegistrationFailureFeature : object, Xunit.IClassFixture<VideoRegistrationFailureFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private global::Reqnroll.ITestRunner testRunner;
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Video submission validation", null, global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Video registration failure", null, global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "VideoRegistrationValidation.feature"
+#line 1 "VideoRegistrationServerError.feature"
 #line hidden
         
-        public VideoSubmissionValidationFeature(VideoSubmissionValidationFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public VideoRegistrationFailureFeature(VideoRegistrationFailureFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -92,25 +92,14 @@ namespace Vidsnap.BddTest.Features
             await this.TestTearDownAsync();
         }
         
-        [Xunit.SkippableTheoryAttribute(DisplayName="Submitting invalid video data should return validation errors")]
-        [Xunit.TraitAttribute("FeatureTitle", "Video submission validation")]
-        [Xunit.TraitAttribute("Description", "Submitting invalid video data should return validation errors")]
-        [Xunit.InlineDataAttribute("00000000-0000-0000-0000-000000000001", "user@email.com", "", "mp4", "100", "60", "O NomeVideo é obrigatório.", new string[0])]
-        [Xunit.InlineDataAttribute("00000000-0000-0000-0000-000000000001", "user@email.com", "MeuVideo", "exe", "100", "60", "A Extensão deve ser um dos formatos suportados: mp4, avi, mov, mkv", new string[0])]
-        [Xunit.InlineDataAttribute("00000000-0000-0000-0000-000000000001", "user@email.com", "MeuVideo", "mp4", "0", "60", "O Tamanho do vídeo deve ser maior que zero.", new string[0])]
-        [Xunit.InlineDataAttribute("00000000-0000-0000-0000-000000000001", "user@email.com", "MeuVideo", "mp4", "100", "0", "A Duração do vídeo deve ser maior que zero.", new string[0])]
-        public async System.Threading.Tasks.Task SubmittingInvalidVideoDataShouldReturnValidationErrors(string idUsuario, string email, string nome, string ext, string tam, string dur, string mensagemErroEsperada, string[] exampleTags)
+        [Xunit.SkippableFactAttribute(DisplayName="Unexpected error during video registration returns 500")]
+        [Xunit.TraitAttribute("FeatureTitle", "Video registration failure")]
+        [Xunit.TraitAttribute("Description", "Unexpected error during video registration returns 500")]
+        public async System.Threading.Tasks.Task UnexpectedErrorDuringVideoRegistrationReturns500()
         {
-            string[] tagsOfScenario = exampleTags;
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            argumentsOfScenario.Add("IdUsuario", idUsuario);
-            argumentsOfScenario.Add("Email", email);
-            argumentsOfScenario.Add("Nome", nome);
-            argumentsOfScenario.Add("Ext", ext);
-            argumentsOfScenario.Add("Tam", tam);
-            argumentsOfScenario.Add("Dur", dur);
-            argumentsOfScenario.Add("MensagemErroEsperada", mensagemErroEsperada);
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Submitting invalid video data should return validation errors", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Unexpected error during video registration returns 500", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 3
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -121,31 +110,31 @@ namespace Vidsnap.BddTest.Features
             else
             {
                 await this.ScenarioStartAsync();
-                global::Reqnroll.Table table3 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table1 = new global::Reqnroll.Table(new string[] {
                             "IdUsuario",
                             "EmailUsuario",
                             "NomeVideo",
                             "Extensao",
                             "Tamanho",
                             "Duracao"});
-                table3.AddRow(new string[] {
-                            string.Format("{0}", idUsuario),
-                            string.Format("{0}", email),
-                            string.Format("{0}", nome),
-                            string.Format("{0}", ext),
-                            string.Format("{0}", tam),
-                            string.Format("{0}", dur)});
+                table1.AddRow(new string[] {
+                            "00000000-0000-0000-0000-000000000001",
+                            "user@email.com",
+                            "MeuVideo",
+                            "mp4",
+                            "100",
+                            "60"});
 #line 4
-    await testRunner.GivenAsync("I have the following invalid video data:", ((string)(null)), table3, "Given ");
+    await testRunner.GivenAsync("I have the following valid video data:", ((string)(null)), table1, "Given ");
 #line hidden
 #line 7
-    await testRunner.WhenAsync("I POST this data to \"/api/videos\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+    await testRunner.AndAsync("I want to simulate a Internal Server Error", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 8
-    await testRunner.ThenAsync("the response status code should be 400", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+    await testRunner.WhenAsync("I POST this data to \"/api/videos\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 9
-    await testRunner.AndAsync(string.Format("the response should contain the error \"{0}\"", mensagemErroEsperada), ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+    await testRunner.ThenAsync("the response status code should be 500", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -158,12 +147,12 @@ namespace Vidsnap.BddTest.Features
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.InitializeAsync()
             {
-                await VideoSubmissionValidationFeature.FeatureSetupAsync();
+                await VideoRegistrationFailureFeature.FeatureSetupAsync();
             }
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.DisposeAsync()
             {
-                await VideoSubmissionValidationFeature.FeatureTearDownAsync();
+                await VideoRegistrationFailureFeature.FeatureTearDownAsync();
             }
         }
     }
