@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Vidsnap.Domain.Entities;
+﻿using Vidsnap.Domain.Entities;
 
 namespace Vidsnap.Domain.Ports.Outbound
 {
