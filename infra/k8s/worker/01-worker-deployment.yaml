@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-videos-status-deployment
+spec:
+  selector:
+    matchLabels:
+      app: worker-videos-status-pod
+  template:
+    metadata:
+      labels:
+        app: worker-videos-status-pod
+    spec:
+      containers:
+        - name: worker-videos-status-container
+          image: # valor será incluido no pipeline
+          env:
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: videos-db-connection-secret
+                  key: connection-string
+            - name: AWS__Credentials__AccessKey
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credential-secret
+                  key: access-key
+            - name: AWS__Credentials__SecretKey
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credential-secret
+                  key: secret-key
+            - name: AWS__Credentials__SessionToken
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credential-secret
+                  key: session-token
+            - name: AWS__Region
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credential-secret
+                  key: region
+            - name: AWS__Queues__QueueURL
+              valueFrom:
+                configMapKeyRef:
+                  name: sqs-queues-configmap
+                  key: videos-status-queue
+            - name: AWS__Queues__DlqQueueURL
+              valueFrom:
+                configMapKeyRef:
+                  name: sqs-queues-configmap
+                  key: videos-status-queue-dlq
+            - name: AWS__Queues__MaxNumberOfMessages
+              valueFrom:
+                configMapKeyRef:
+                  name: worker-videos-status-configmap
+                  key: max-messages-limit
+
+          resources:
+            requests:
+              memory: "96Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+         
