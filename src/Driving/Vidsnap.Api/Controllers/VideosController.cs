@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using Vidsnap.Application.DTOs.Requests;
 using Vidsnap.Application.DTOs.Responses;
@@ -30,8 +31,8 @@ namespace Vidsnap.Api.Controllers
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Cadastra um novo vídeo para processamento.")]
         public async Task<IActionResult> Post(
-            [FromHeader(Name = "X-User-Id")] Guid idUsuario,
-            [FromHeader(Name = "X-User-Email")] string? emailUsuario,
+            [FromHeader(Name = "X-User-Id")][Required] Guid idUsuario,
+            [FromHeader(Name = "X-User-Email")][Required] string emailUsuario,
             [FromBody] NovoVideoBodyRequest requestBody)
         {
              var useCaseRequest = new NovoVideoRequest(
@@ -62,7 +63,7 @@ namespace Vidsnap.Api.Controllers
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Lista todos os vídeo cadastrados pelo usuário")]
-        public async Task<IActionResult> ObterVideosPorUsuario([FromHeader(Name = "X-User-Id")] Guid idUsuario)
+        public async Task<IActionResult> ObterVideosPorUsuario([FromHeader(Name = "X-User-Id")][Required] Guid idUsuario)
             => await ExecucaoPadrao(
                 "Videos.ObterVideosPorUsuario", 
                 _buscarVideosUseCase.ObterVideosDoUsuarioAsync(idUsuario)
@@ -83,7 +84,7 @@ namespace Vidsnap.Api.Controllers
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Lista todos os vídeo cadastrados pelo usuário")]
-        public async Task<IActionResult> ObterLinksDeDownloadDoVideo([FromHeader(Name = "X-User-Id")]  Guid idUsuario, [FromRoute(Name = "id-video")] Guid idVideo)
+        public async Task<IActionResult> ObterLinksDeDownloadDoVideo([FromHeader(Name = "X-User-Id")][Required]  Guid idUsuario, [FromRoute(Name = "id-video")] Guid idVideo)
             => await ExecucaoPadrao(
                 "Videos.ObterLinksDeDownloadDoVideo",
                 _buscarVideosUseCase.ObterLinksDeDownloadAsync(idVideo, idUsuario)
