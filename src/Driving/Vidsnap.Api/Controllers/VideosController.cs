@@ -15,14 +15,16 @@ namespace Vidsnap.Api.Controllers
         IProcessarVideoUseCase _processarVideoUseCase,
         IBuscarVideosUseCase _buscarVideosUseCase) : CustomBaseController(_logger)
     {
-        
+
         /// <summary>
         /// Cadastra um novo vídeo para processamento.
         /// </summary>
         /// <remarks>
         /// Cadastra um novo vídeo para processamento.
         /// </remarks>
-        /// <param name="novoVideoRequest">Os dados do video a ser processado.</param>
+        /// <param name="idUsuario">Identificador do usuário</param>
+        /// <param name="emailUsuario">Email do usuário</param>
+        /// <param name="requestBody">Os dados do video a ser processado.</param>
         /// <returns>Um <see cref="IActionResult"/> representando o resultado da operação.</returns>
         [HttpPost]
         [Consumes(MediaTypeNames.Application.Json)]

@@ -3,16 +3,16 @@ using Vidsnap.Application.DTOs.Requests;
 
 namespace Vidsnap.Application.DTOs.Validators
 {
-    public class NovoVideoRequestValidator : AbstractValidator<NovoVideoRequest>
+    public class NovoVideoRequestBodyValidator : AbstractValidator<NovoVideoBodyRequest>
     {
-        public NovoVideoRequestValidator()
+        public NovoVideoRequestBodyValidator()
         {
-            RuleFor(v => v.IdUsuario)
-                .NotEmpty().WithMessage("O IdUsuario é obrigatório.");
+            //RuleFor(v => v.IdUsuario)
+            //    .NotEmpty().WithMessage("O IdUsuario é obrigatório.");
 
-            RuleFor(v => v.EmailUsuario)
-                .NotEmpty().WithMessage("O EmailUsuario é obrigatório.")
-                .EmailAddress().WithMessage("O EmailUsuario deve ser um endereço de e-mail válido.");
+            //RuleFor(v => v.EmailUsuario)
+            //    .NotEmpty().WithMessage("O EmailUsuario é obrigatório.")
+            //    .EmailAddress().WithMessage("O EmailUsuario deve ser um endereço de e-mail válido.");
 
             RuleFor(v => v.NomeVideo)
                 .NotEmpty().WithMessage("O NomeVideo é obrigatório.")
