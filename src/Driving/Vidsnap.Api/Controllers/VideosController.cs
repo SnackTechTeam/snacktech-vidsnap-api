@@ -77,7 +77,7 @@ namespace Vidsnap.Api.Controllers
         /// <param name="idUsuario">Identificador do usuário.</param>
         /// <param name="idVideo">Identificador do video.</param>
         /// <returns>Um <see cref="IActionResult"/> representando o resultado da operação.</returns>
-        [HttpGet("/{id-video}")]
+        [HttpGet("{id-video}")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType<IReadOnlyList<LinksDeDownloadResponse>>(StatusCodes.Status200OK)]
         [ProducesResponseType<ErrorResponse>(StatusCodes.Status400BadRequest)]
