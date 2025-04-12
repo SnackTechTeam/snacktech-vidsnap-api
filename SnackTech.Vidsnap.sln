@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driving", "Driving", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		src\.gitlab-ci.yml = src\.gitlab-ci.yml
+		.gitlab-ci.yml = .gitlab-ci.yml
+		coverage.runsettings.xml = coverage.runsettings.xml
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vidsnap.Api", "src\Driving\Vidsnap.Api\Vidsnap.Api.csproj", "{53DFF54D-0A33-EB0E-B02F-7390909BD654}"
 EndProject
@@ -28,6 +33,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vidsnap.Worker.AtualizaStatusProcessamento", "src\Driving\Vidsnap.Worker.AtualizaStatus\Vidsnap.Worker.AtualizaStatusProcessamento\Vidsnap.Worker.AtualizaStatusProcessamento.csproj", "{E2CEB948-3C1E-416C-8980-4390021FE58D}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "src\docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vidsnap.BddTest", "src\Tests\Vidsnap.BddTest\Vidsnap.BddTest\Vidsnap.BddTest.csproj", "{18A144D3-16FC-43B6-B1A2-326D4FA14D33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +78,10 @@ Global
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18A144D3-16FC-43B6-B1A2-326D4FA14D33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18A144D3-16FC-43B6-B1A2-326D4FA14D33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18A144D3-16FC-43B6-B1A2-326D4FA14D33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18A144D3-16FC-43B6-B1A2-326D4FA14D33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +95,7 @@ Global
 		{7CB24C38-157B-8691-811B-F94CADDA8E0F} = {A87CD217-24D4-4EC2-8AF7-186E0BDADF97}
 		{5698D830-3B68-ECB0-9ECC-EC13D06CC2EE} = {A87CD217-24D4-4EC2-8AF7-186E0BDADF97}
 		{E2CEB948-3C1E-416C-8980-4390021FE58D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{18A144D3-16FC-43B6-B1A2-326D4FA14D33} = {7C8CD3EE-D780-4D35-B1CA-671E1462372E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5A47494A-0EB3-41A1-92B4-8FEE2919FA9C}

@@ -11,14 +11,14 @@ using Vidsnap.S3Bucket;
 namespace Vidsnap.Api
 {
     [ExcludeFromCodeCoverage]
-    internal static class Program
+    public class Program
     {
-        private static async Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            ConfigureServices(builder.Services, builder.Configuration);
+            ConfigureServices(builder);
 
             var app = builder.Build();
 
@@ -29,18 +29,18 @@ namespace Vidsnap.Api
             await app.RunAsync();
         }
 
-        private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        private static void ConfigureServices(WebApplicationBuilder builder)
         {
-            services.AddAdapterDatabaseRepositories();
-            services.AddCoreUseCases();
-            services.AddApplicationValidators();
-            services.AddAdapterAmazonS3Bucket(configuration);
+            builder.Services.AddAdapterDatabaseRepositories();
+            builder.Services.AddCoreUseCases();
+            builder.Services.AddApplicationValidators();
+            builder.Services.AddAdapterAmazonS3Bucket(builder.Configuration);
 
-            services.AddControllers();
+            builder.Services.AddControllers();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(c =>
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(c =>
             {
                 c.EnableAnnotations();
                 c.DescribeAllParametersInCamelCase();
@@ -50,7 +50,7 @@ namespace Vidsnap.Api
                 c.IncludeXmlComments(xmlPath);
             });
 
-            string dbConnectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
+            string dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
 
             if (string.IsNullOrEmpty(dbConnectionString))
             {
@@ -58,18 +58,24 @@ namespace Vidsnap.Api
                     "Could not find a connection string named 'DefaultConnection'.");
             }
 
-            services.AddDbContext<AppDbContext>(options =>
+            if (!builder.Environment.IsEnvironment("Testing"))
+            {
+                builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(dbConnectionString));
+            }
 
-            services.AddHealthChecks()
+            builder.Services.AddHealthChecks()
                     .ConfigureSQLHealthCheck();
         }
 
         private static async Task ApplyDatabaseMigrationAsync(WebApplication app)
         {
-            using var scope = app.Services.CreateScope();
-            await using var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            await dbContext.Database.MigrateAsync();
+            if (!app.Environment.IsEnvironment("Testing"))
+            {
+                using var scope = app.Services.CreateScope();
+                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                await dbContext.Database.MigrateAsync();
+            }
         }
 
         private static void ConfigureMiddleware(WebApplication app)
