@@ -12,6 +12,7 @@ using Vidsnap.Application.UseCases;
 using Vidsnap.DataBase;
 using Vidsnap.DataBase.Context;
 using Vidsnap.Domain.Ports.Outbound;
+using Vidsnap.SQS.Publishers;
 using Vidsnap.SQS.QueueClient;
 
 namespace Vidsnap.Worker.AtualizaStatusProcessamento
@@ -74,6 +75,7 @@ namespace Vidsnap.Worker.AtualizaStatusProcessamento
             });
 
             services.AddTransient<IMessageQueueService<AtualizaStatusVideoRequest>, SqsMessageQueue<AtualizaStatusVideoRequest>>();
+            services.AddTransient<IVideoPublisher, VideoPublisher>();
         }
 
         private static void RegisterApplicationValidators(IServiceCollection services)
