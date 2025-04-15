@@ -2,7 +2,6 @@ using Amazon.SQS;
 using Amazon.SQS.Model;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
-using System.Threading;
 using Vidsnap.Application.DTOs.Settings;
 using Vidsnap.Domain.DTOs.Queues;
 using Vidsnap.Domain.Ports.Outbound;
@@ -18,7 +17,7 @@ public class SqsMessageQueue<T>(IAmazonSQS sqsClient, IOptions<QueuesSettings> q
     {
         var request = new ReceiveMessageRequest
         {
-            QueueUrl = _queuesSettings.QueueUrl,
+            QueueUrl = _queuesSettings.QueueAtualizaStatusURL,
             MaxNumberOfMessages = _queuesSettings.MaxNumberOfMessages,
             WaitTimeSeconds = 5
         };
@@ -47,17 +46,6 @@ public class SqsMessageQueue<T>(IAmazonSQS sqsClient, IOptions<QueuesSettings> q
         return result;
     }
 
-    public async Task EnviarMensagemAsync(T messageBody, CancellationToken cancellationToken = default)
-    {
-        var request = new SendMessageRequest
-        {
-            QueueUrl = _queuesSettings.QueueUrl,
-            MessageBody = JsonSerializer.Serialize(messageBody)
-        };
-
-        await _sqsClient.SendMessageAsync(request, cancellationToken);
-    }
-
     public async Task DeletarMensagemAsync(object messageIdentifier, CancellationToken cancellationToken = default)
     {
         if (messageIdentifier is not string receiptHandle)
@@ -65,7 +53,7 @@ public class SqsMessageQueue<T>(IAmazonSQS sqsClient, IOptions<QueuesSettings> q
 
         var request = new DeleteMessageRequest
         {
-            QueueUrl = _queuesSettings.QueueUrl,
+            QueueUrl = _queuesSettings.QueueAtualizaStatusURL,
             ReceiptHandle = receiptHandle
         };
 
@@ -85,7 +73,7 @@ public class SqsMessageQueue<T>(IAmazonSQS sqsClient, IOptions<QueuesSettings> q
         // Reenviar a mensagem para a DLQ
         var sendRequest = new SendMessageRequest
         {
-            QueueUrl = _queuesSettings.DlqQueueURL, // Agora a mensagem vai para a DLQ
+            QueueUrl = _queuesSettings.DlqQueueAtualizaStatusURL, // Agora a mensagem vai para a DLQ
             MessageBody = messageBody
         };
 

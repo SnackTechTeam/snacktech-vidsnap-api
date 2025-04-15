@@ -14,6 +14,7 @@ namespace Vidsnap.UnitTest.Core.Vidsnap.Application.UseCases
     public class AtualizarStatusVideoUseCaseTests
     {
         private readonly Mock<IMessageQueueService<AtualizaStatusVideoRequest>> _messageQueueServiceMock = new();
+        private readonly Mock<IVideoPublisher> _videoPublisherMock = new();
         private readonly Mock<IVideoRepository> _videoRepositoryMock = new();
         private readonly Mock<IValidator<AtualizaStatusVideoRequest>> _validatorMock = new();
         private readonly Mock<ILogger<AtualizarStatusVideoUseCase>> _loggerMock = new();
@@ -23,6 +24,7 @@ namespace Vidsnap.UnitTest.Core.Vidsnap.Application.UseCases
         {
             _useCase = new AtualizarStatusVideoUseCase(
                 _messageQueueServiceMock.Object,
+                _videoPublisherMock.Object,
                 _videoRepositoryMock.Object,
                 _validatorMock.Object,
                 _loggerMock.Object
@@ -55,6 +57,9 @@ namespace Vidsnap.UnitTest.Core.Vidsnap.Application.UseCases
             _messageQueueServiceMock.Setup(m => m.DeletarMensagemAsync(queueMessage.MessageIdentifier, It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
 
+            _videoPublisherMock.Setup(p => p.PublicarProcessamentoFinalizadoAsync(video, It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
             // Act
             await _useCase.AtualizarStatusDeProcessamentoAsync();
 
@@ -62,6 +67,7 @@ namespace Vidsnap.UnitTest.Core.Vidsnap.Application.UseCases
             Assert.Equal(Status.FinalizadoComSucesso, video.StatusAtual);
             _videoRepositoryMock.Verify(r => r.AtualizarStatusProcessamentoAsync(video, Status.FinalizadoComSucesso), Times.Once);
             _messageQueueServiceMock.Verify(m => m.DeletarMensagemAsync(queueMessage.MessageIdentifier, It.IsAny<CancellationToken>()), Times.Once);
+            _videoPublisherMock.Verify(p => p.PublicarProcessamentoFinalizadoAsync(video, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]

@@ -22,8 +22,8 @@ namespace Vidsnap.UnitTest.Driven.Vidsnap.SQS.QueueClient
             _sqsClientMock = new Mock<IAmazonSQS>();
             _queuesSettings = new QueuesSettings
             {
-                QueueUrl = "https://sqs.us-east-1.amazonaws.com/123456789012/my-queue",
-                DlqQueueURL = "https://sqs.us-east-1.amazonaws.com/123456789012/my-dlq",
+                QueueAtualizaStatusURL = "https://sqs.us-east-1.amazonaws.com/123456789012/my-queue",
+                DlqQueueAtualizaStatusURL = "https://sqs.us-east-1.amazonaws.com/123456789012/my-dlq",
                 MaxNumberOfMessages = 5
             };
             _queuesSettingsMock = new Mock<IOptions<QueuesSettings>>();
@@ -53,21 +53,6 @@ namespace Vidsnap.UnitTest.Driven.Vidsnap.SQS.QueueClient
         }
 
         [Fact]
-        public async Task EnviarMensagemAsync_DeveChamarSendMessageAsync()
-        {
-            var testMessage = new TestMessage { Content = "Nova mensagem" };
-
-            _sqsClientMock.Setup(s => s.SendMessageAsync(It.IsAny<SendMessageRequest>(), default))
-                .ReturnsAsync(new SendMessageResponse());
-
-            await _messageQueue.EnviarMensagemAsync(testMessage);
-
-            _sqsClientMock.Verify(s => s.SendMessageAsync(
-                It.Is<SendMessageRequest>(req => req.QueueUrl == _queuesSettings.QueueUrl && req.MessageBody.Contains("Nova mensagem")), default),
-                Times.Once);
-        }
-
-        [Fact]
         public async Task DeletarMensagemAsync_DeveChamarDeleteMessageAsync()
         {
             const string receiptHandle = "receipt-handle";
@@ -78,7 +63,7 @@ namespace Vidsnap.UnitTest.Driven.Vidsnap.SQS.QueueClient
             await _messageQueue.DeletarMensagemAsync(receiptHandle);
 
             _sqsClientMock.Verify(s => s.DeleteMessageAsync(
-                It.Is<DeleteMessageRequest>(req => req.QueueUrl == _queuesSettings.QueueUrl && req.ReceiptHandle == receiptHandle), default),
+                It.Is<DeleteMessageRequest>(req => req.QueueUrl == _queuesSettings.QueueAtualizaStatusURL && req.ReceiptHandle == receiptHandle), default),
                 Times.Once);
         }
 
@@ -97,7 +82,7 @@ namespace Vidsnap.UnitTest.Driven.Vidsnap.SQS.QueueClient
             await _messageQueue.MoverParaDlqAsync(queueMessage);
 
             _sqsClientMock.Verify(s => s.SendMessageAsync(
-                It.Is<SendMessageRequest>(r => r.QueueUrl == _queuesSettings.DlqQueueURL), default), Times.Once);
+                It.Is<SendMessageRequest>(r => r.QueueUrl == _queuesSettings.DlqQueueAtualizaStatusURL), default), Times.Once);
 
             _sqsClientMock.Verify(s => s.DeleteMessageAsync(
                 It.Is<DeleteMessageRequest>(r => r.ReceiptHandle == "receipt-handle"), default), Times.Once);

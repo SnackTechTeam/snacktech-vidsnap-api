@@ -5,3 +5,7 @@ variable "regionDefault" {
 variable "sqsVideoStatusQueueName" {
   default = "vidsnap-atualiza-video-status"
 }
+
+variable "sqsNotificaUsuarioQueueName" {
+  default = "vidsnap-notifica-usuario"
+}

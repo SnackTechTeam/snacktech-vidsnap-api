@@ -10,12 +10,14 @@ namespace Vidsnap.Application.UseCases
 {
     public class AtualizarStatusVideoUseCase(
         IMessageQueueService<AtualizaStatusVideoRequest> messageQueueService,
+        IVideoPublisher videoPublisher,
         IVideoRepository videoRepository,
         IValidator<AtualizaStatusVideoRequest> validator,
         ILogger<AtualizarStatusVideoUseCase> logger
         ) : IAtualizarStatusVideoUseCase
     {        
         private readonly IMessageQueueService<AtualizaStatusVideoRequest> _messageQueueService = messageQueueService;
+        private readonly IVideoPublisher _videoPublisher = videoPublisher;
         private readonly IVideoRepository _videoRepository = videoRepository;
         private readonly IValidator<AtualizaStatusVideoRequest> _validator = validator;
         private readonly ILogger<AtualizarStatusVideoUseCase> _logger = logger;
@@ -58,6 +60,11 @@ namespace Vidsnap.Application.UseCases
                         await _videoRepository.AtualizarStatusProcessamentoAsync(video, status);
 
                         await _messageQueueService.DeletarMensagemAsync(queueMessage.MessageIdentifier, cancellationToken);
+
+                        if (status == Status.FinalizadoComSucesso || status == Status.FinalizadoComErro)
+                        {
+                            await _videoPublisher.PublicarProcessamentoFinalizadoAsync(video, cancellationToken);
+                        }
                     }
                     else
                     {
