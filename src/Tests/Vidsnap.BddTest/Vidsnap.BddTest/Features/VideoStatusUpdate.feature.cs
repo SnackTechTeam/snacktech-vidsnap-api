@@ -19,21 +19,21 @@ namespace Vidsnap.BddTest.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class VideoRegistrationSuccessFeature : object, Xunit.IClassFixture<VideoRegistrationSuccessFeature.FixtureData>, Xunit.IAsyncLifetime
+    public partial class VideoStatusUpdateFeature : object, Xunit.IClassFixture<VideoStatusUpdateFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private global::Reqnroll.ITestRunner testRunner;
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Video Registration Success", null, global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Video status update", null, global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "VideoRegistrationSuccess.feature"
+#line 1 "VideoStatusUpdate.feature"
 #line hidden
         
-        public VideoRegistrationSuccessFeature(VideoRegistrationSuccessFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public VideoStatusUpdateFeature(VideoStatusUpdateFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -92,14 +92,14 @@ namespace Vidsnap.BddTest.Features
             await this.TestTearDownAsync();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Submitting a valid video should return 200 and a confirmation")]
-        [Xunit.TraitAttribute("FeatureTitle", "Video Registration Success")]
-        [Xunit.TraitAttribute("Description", "Submitting a valid video should return 200 and a confirmation")]
-        public async System.Threading.Tasks.Task SubmittingAValidVideoShouldReturn200AndAConfirmation()
+        [Xunit.SkippableFactAttribute(DisplayName="Update video status after create it")]
+        [Xunit.TraitAttribute("FeatureTitle", "Video status update")]
+        [Xunit.TraitAttribute("Description", "Update video status after create it")]
+        public async System.Threading.Tasks.Task UpdateVideoStatusAfterCreateIt()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Submitting a valid video should return 200 and a confirmation", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Update video status after create it", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 3
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -110,31 +110,37 @@ namespace Vidsnap.BddTest.Features
             else
             {
                 await this.ScenarioStartAsync();
-                global::Reqnroll.Table table4 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table6 = new global::Reqnroll.Table(new string[] {
                             "IdUsuario",
                             "EmailUsuario",
                             "NomeVideo",
                             "Extensao",
                             "Tamanho",
                             "Duracao"});
-                table4.AddRow(new string[] {
-                            "00000000-0000-0000-0000-000000000001",
-                            "user@example.com",
-                            "MeuVideo",
+                table6.AddRow(new string[] {
+                            "00000000-0000-0000-0000-000000000003",
+                            "usuario@email.com",
+                            "Teste.mp4",
                             "mp4",
-                            "100",
-                            "60"});
+                            "200",
+                            "120"});
 #line 4
-    await testRunner.GivenAsync("I have the following valid video data:", ((string)(null)), table4, "Given ");
+    await testRunner.GivenAsync("I have the following valid video data:", ((string)(null)), table6, "Given ");
 #line hidden
 #line 7
-    await testRunner.WhenAsync("I POST this data to \"api/videos\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+    await testRunner.AndAsync("I register this video", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 8
-    await testRunner.ThenAsync("the response status code should be 200", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+    await testRunner.WhenAsync("I receive a message with status \"Processando\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 9
-    await testRunner.AndAsync("the response should contain a valid video registration confirmation", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+    await testRunner.AndAsync("I successfuly process the message", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 10
+    await testRunner.AndAsync("I GET the video by name \"Teste.mp4\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 11
+    await testRunner.ThenAsync("the current status should be \"Processando\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -147,12 +153,12 @@ namespace Vidsnap.BddTest.Features
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.InitializeAsync()
             {
-                await VideoRegistrationSuccessFeature.FeatureSetupAsync();
+                await VideoStatusUpdateFeature.FeatureSetupAsync();
             }
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.DisposeAsync()
             {
-                await VideoRegistrationSuccessFeature.FeatureTearDownAsync();
+                await VideoStatusUpdateFeature.FeatureTearDownAsync();
             }
         }
     }

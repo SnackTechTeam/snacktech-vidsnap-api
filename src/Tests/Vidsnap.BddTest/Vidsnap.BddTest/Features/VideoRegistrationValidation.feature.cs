@@ -121,14 +121,14 @@ namespace Vidsnap.BddTest.Features
             else
             {
                 await this.ScenarioStartAsync();
-                global::Reqnroll.Table table3 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table5 = new global::Reqnroll.Table(new string[] {
                             "IdUsuario",
                             "EmailUsuario",
                             "NomeVideo",
                             "Extensao",
                             "Tamanho",
                             "Duracao"});
-                table3.AddRow(new string[] {
+                table5.AddRow(new string[] {
                             string.Format("{0}", idUsuario),
                             string.Format("{0}", email),
                             string.Format("{0}", nome),
@@ -136,7 +136,7 @@ namespace Vidsnap.BddTest.Features
                             string.Format("{0}", tam),
                             string.Format("{0}", dur)});
 #line 4
-    await testRunner.GivenAsync("I have the following invalid video data:", ((string)(null)), table3, "Given ");
+    await testRunner.GivenAsync("I have the following invalid video data:", ((string)(null)), table5, "Given ");
 #line hidden
 #line 7
     await testRunner.WhenAsync("I POST this data to \"/api/videos\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");

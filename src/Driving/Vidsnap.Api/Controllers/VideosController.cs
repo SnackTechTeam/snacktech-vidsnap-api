@@ -15,7 +15,6 @@ namespace Vidsnap.Api.Controllers
         IProcessarVideoUseCase _processarVideoUseCase,
         IBuscarVideosUseCase _buscarVideosUseCase) : CustomBaseController(_logger)
     {
-
         /// <summary>
         /// Cadastra um novo vídeo para processamento.
         /// </summary>

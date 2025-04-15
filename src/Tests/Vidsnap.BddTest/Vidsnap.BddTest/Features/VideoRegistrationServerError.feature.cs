@@ -110,14 +110,14 @@ namespace Vidsnap.BddTest.Features
             else
             {
                 await this.ScenarioStartAsync();
-                global::Reqnroll.Table table1 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table3 = new global::Reqnroll.Table(new string[] {
                             "IdUsuario",
                             "EmailUsuario",
                             "NomeVideo",
                             "Extensao",
                             "Tamanho",
                             "Duracao"});
-                table1.AddRow(new string[] {
+                table3.AddRow(new string[] {
                             "00000000-0000-0000-0000-000000000001",
                             "user@email.com",
                             "MeuVideo",
@@ -125,7 +125,7 @@ namespace Vidsnap.BddTest.Features
                             "100",
                             "60"});
 #line 4
-    await testRunner.GivenAsync("I have the following valid video data:", ((string)(null)), table1, "Given ");
+    await testRunner.GivenAsync("I have the following valid video data:", ((string)(null)), table3, "Given ");
 #line hidden
 #line 7
     await testRunner.AndAsync("I want to simulate a Internal Server Error", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");

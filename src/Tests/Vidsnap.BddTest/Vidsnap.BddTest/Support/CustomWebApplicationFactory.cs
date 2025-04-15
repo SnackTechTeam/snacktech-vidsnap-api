@@ -6,7 +6,10 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Moq;
 using Vidsnap.Api;
+using Vidsnap.Application.Ports.Inbound;
+using Vidsnap.Application.UseCases;
 using Vidsnap.DataBase.Context;
+using Vidsnap.Domain.Entities;
 using Vidsnap.Domain.Ports.Outbound;
 
 namespace Vidsnap.BddTest.Support
@@ -61,14 +64,15 @@ namespace Vidsnap.BddTest.Support
                 services.RemoveAll<ICloudFileStorageService>();
                 services.AddSingleton(cloudStorageMock.Object);
 
-                // Substitui SQS se necessário
-                /*
-                var sqsMock = new Mock<IMessageQueueService<>>();
+                //Adiciona mock de IVideoPublisher
+                var videoPublisherMock = new Mock<IVideoPublisher>();
 
+                videoPublisherMock.Setup(s => s.PublicarProcessamentoFinalizadoAsync(It.IsAny<Video>(), It.IsAny<CancellationToken>()))
+                    .Returns(Task.CompletedTask);
 
-                services.RemoveAll<IAmazonSQS>();
-                services.AddSingleton(sqsMock.Object);
-                */
+                services.AddSingleton(videoPublisherMock.Object);
+
+                services.AddScoped<IAtualizarStatusVideoUseCase, AtualizarStatusVideoUseCase>();
             });
 
             return base.CreateHost(builder);
