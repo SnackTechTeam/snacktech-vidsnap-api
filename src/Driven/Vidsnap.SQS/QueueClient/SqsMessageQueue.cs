@@ -74,7 +74,7 @@ public class SqsMessageQueue<T>(IAmazonSQS sqsClient, IOptions<QueuesSettings> q
         var sendRequest = new SendMessageRequest
         {
             QueueUrl = _queuesSettings.DlqQueueAtualizaStatusURL, // Agora a mensagem vai para a DLQ
-            MessageGroupId = messageIdentifier,
+            MessageGroupId = "Erro",
             MessageBody = messageBody
         };
 
