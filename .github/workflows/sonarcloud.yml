@@ -26,33 +26,6 @@ jobs:
             $SOLUTION_PATH = "./SnackTech.Vidsnap.sln"
             echo "SOLUTION_PATH=$SOLUTION_PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Restore dependencies
-        shell: pwsh # Explicitly set shell to PowerShell
-        run: dotnet restore $env:SOLUTION_PATH
-
-      - name: Build
-        shell: pwsh # Explicitly set shell to PowerShell
-        run: dotnet build $env:SOLUTION_PATH --configuration Release --no-restore
-
-      - name: Test
-        shell: pwsh # Explicitly set shell to PowerShell
-        run: dotnet test $env:SOLUTION_PATH --configuration Release --no-build --collect:"XPlat Code Coverage" --logger:"trx;LogFileName=..\TestResults.trx" # Using backslash for Windows path
-      
-      - name: Install ReportGenerator and dotnet-coverage
-        shell: pwsh # Explicitly set shell to PowerShell
-        run: |
-          dotnet tool install -g dotnet-reportgenerator-globaltool
-          dotnet tool install -g dotnet-coverage
-          
-      - name: Merge Test Results
-        shell: pwsh # Explicitly set shell to PowerShell
-        run: |
-          dotnet-coverage merge *.cobertura.xml --recursive --output merged.cobertura.xml --output-format cobertura
-  
-      - name: Generate Coverage Report
-        shell: pwsh # Explicitly set shell to PowerShell
-        run: reportgenerator -reports:./**/merged.cobertura.xml -targetdir:./CoverageReport -reporttypes:Html
-  
       - name: Cache SonarQube Cloud packages
         uses: actions/cache@v4
         with:
@@ -78,5 +51,15 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"SnackTechTeam_snacktech-vidsnap-api" /o:"snacktechteam" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.cobertura.reportPaths="merged.cobertura.xml" 
-          dotnet build
+          
+          dotnet restore $env:SOLUTION_PATH
+          dotnet build $env:SOLUTION_PATH --configuration Release --no-restore
+          dotnet test $env:SOLUTION_PATH --configuration Release --no-build --collect:"XPlat Code Coverage" --logger:"trx;LogFileName=..\TestResults.trx" # Using backslash for Windows path
+      
+          dotnet tool install -g dotnet-reportgenerator-globaltool
+          dotnet tool install -g dotnet-coverage
+        
+          dotnet-coverage merge *.cobertura.xml --recursive --output merged.cobertura.xml --output-format cobertura
+          reportgenerator -reports:./**/merged.cobertura.xml -targetdir:./CoverageReport -reporttypes:Html
+
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
