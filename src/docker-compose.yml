@@ -58,8 +58,9 @@ services:
       - AWS__Credentials__SessionToken=[SEU-SESSION-TOKEN-AQUI]
       - AWS_REGION=us-east-1
       - AWS__Queues__MaxNumberOfMessages=5
-      - AWS__Queues__QueueURL=https://sqs.us-east-1.amazonaws.com/358872894252/vidsnap-atualiza-video-status
-      - AWS__Queues__DlqQueueURL=https://sqs.us-east-1.amazonaws.com/358872894252/vidsnap-atualiza-video-status-dlq
+      - AWS__Queues__QueueAtualizaStatusURL=https://sqs.us-east-1.amazonaws.com/358872894252/vidsnap-atualiza-video-status
+      - AWS__Queues__DlqQueueAtualizaStatusURL=https://sqs.us-east-1.amazonaws.com/358872894252/vidsnap-atualiza-video-status-dlq
+      - AWS__Queues__QueueEnviaNotificacaoURL=https://sqs.us-east-1.amazonaws.com/822538096011/vidsnap-notifica-usuario
     restart: on-failure
     networks:
       - snacktech-vidsnap-net
