@@ -65,6 +65,8 @@ namespace Vidsnap.Application.UseCases
                         {
                             await _videoPublisher.PublicarProcessamentoFinalizadoAsync(video, cancellationToken);
                         }
+                        
+                        _logger.LogInformation("Mensagem processada com sucesso: {Mensagem}", JsonSerializer.Serialize(queueMessage));
                     }
                     else
                     {
