@@ -10,11 +10,11 @@ using Vidsnap.Domain.Ports.Outbound;
 
 namespace Vidsnap.SQS.QueueClient;
 
-public class SqsMessageQueue<T>(Microsoft.Extensions.Logging.ILogger<SqsMessageQueue<T>> logger, IAmazonSQS sqsClient, IOptions<QueuesSettings> queuesSettings) : IMessageQueueService<T>
+public class SqsMessageQueue<T>(IAmazonSQS sqsClient, IOptions<QueuesSettings> queuesSettings, Microsoft.Extensions.Logging.ILogger<SqsMessageQueue<T>>? logger = null) : IMessageQueueService<T>
 {
     private readonly IAmazonSQS _sqsClient = sqsClient;
     private readonly QueuesSettings _queuesSettings = queuesSettings.Value;
-    private readonly Microsoft.Extensions.Logging.ILogger _logger = logger;
+    private readonly Microsoft.Extensions.Logging.ILogger? _logger = logger;
 
     public async Task<List<QueueMessage<T>>> ReceberMensagemAsync(CancellationToken cancellationToken = default)
     {
@@ -82,16 +82,16 @@ public class SqsMessageQueue<T>(Microsoft.Extensions.Logging.ILogger<SqsMessageQ
             MessageBody = messageBody
         };
 
-        _logger.LogWarning("Enviando mensagem para DLQ: {MessageBody}", messageBody);
-        _logger.LogWarning("MessageDeduplicationId: {MessageIdentifier}", messageIdentifier.GetHashCode().ToString());
+        if(_logger is not null) _logger.LogWarning("Enviando mensagem para DLQ: {MessageBody}", messageBody);
+        if(_logger is not null) _logger.LogWarning("MessageDeduplicationId: {MessageIdentifier}", messageIdentifier.GetHashCode().ToString());
 
         await _sqsClient.SendMessageAsync(sendRequest, cancellationToken);
 
-        _logger.LogInformation("Mensagem enviada para DLQ: {DLQ}", _queuesSettings.DlqQueueAtualizaStatusURL);
+        if(_logger is not null) _logger.LogInformation("Mensagem enviada para DLQ: {DLQ}", _queuesSettings.DlqQueueAtualizaStatusURL);
 
         // Deletar a mensagem original para evitar reprocessamento
         await DeletarMensagemAsync(messageIdentifier, cancellationToken);
 
-        _logger.LogInformation("Mensagem deletada da fila original: {QueueUrl}", _queuesSettings.QueueAtualizaStatusURL);
+        if(_logger is not null) _logger.LogInformation("Mensagem deletada da fila original: {QueueUrl}", _queuesSettings.QueueAtualizaStatusURL);
     }
 }
