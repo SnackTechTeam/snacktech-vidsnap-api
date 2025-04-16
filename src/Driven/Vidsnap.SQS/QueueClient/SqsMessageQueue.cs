@@ -75,7 +75,7 @@ public class SqsMessageQueue<T>(IAmazonSQS sqsClient, IOptions<QueuesSettings> q
         {
             QueueUrl = _queuesSettings.DlqQueueAtualizaStatusURL, // Agora a mensagem vai para a DLQ
             MessageGroupId = "Erro",
-            MessageDeduplicationId = messageIdentifier,
+            MessageDeduplicationId = messageIdentifier.GetHashCode().ToString(),
             MessageBody = messageBody
         };
 
