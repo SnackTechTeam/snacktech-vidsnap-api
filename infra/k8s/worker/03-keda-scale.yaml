@@ -1,0 +1,29 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: worker-videos-status-keda-scaler
+  # namespace: <your-namespace> # Make sure this is the namespace of your deployment
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1          # Matches your Deployment API version
+    kind: Deployment             # Matches your target resource kind
+    name: worker-videos-status-deployment # Name of the Deployment to scale
+  pollingInterval: 30            # How often KEDA should check the queue (seconds)
+  cooldownPeriod:  300           # How long to wait after the last trigger before scaling down (seconds)
+  minReplicaCount: 0             # Minimum number of pods
+  maxReplicaCount: 10            # Maximum number of pods
+  triggers:
+    - type: aws-sqs-queue
+      metadata:
+        queueName: "sqs-video-status"
+        awsRegion: "us-east-1" 
+
+        # Target number of messages per pod. Scale up when messages > (queueLength * current_replicas)
+        # Adjust this value based on how many messages one pod can reasonably process.
+        queueLength: "50"
+
+
+      authenticationRef:
+        # Use the ClusterTriggerAuthentication defined above
+        name: keda-aws-credentials-cluster-auth
+        kind: ClusterTriggerAuthentication # Specify kind when using ClusterTriggerAuthentication
