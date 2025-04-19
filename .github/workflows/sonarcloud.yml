@@ -46,7 +46,7 @@ jobs:
           /d:sonar.host.url="https://sonarcloud.io" \
           /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
           /d:sonar.sources=src \
-          /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
+          /d:sonar.cs.opencover.reportsPaths="**/coverage.*.opencover.xml" \
           /d:sonar.exclusions="**/infra/terraform/**"
 
         dotnet build $SOLUTION_PATH
@@ -55,6 +55,12 @@ jobs:
           --target "dotnet" \
           --targetargs "test src/Tests/Vidsnap.UnitTest --no-build --nologo" \
           --format opencover \
-          --output "TestResults/coverage.opencover.xml"
+          --output "TestResults/coverage.unit.opencover.xml"
+
+        coverlet ./src/Tests/Vidsnap.BddTest/bin/Release/net8.0/Vidsnap.BddTest.dll \
+          --target "dotnet" \
+          --targetargs "test src/Tests/Vidsnap.BddTest --no-build --nologo" \
+          --format opencover \
+          --output "TestResults/coverage.bdd.opencover.xml"
 
         dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}" 
