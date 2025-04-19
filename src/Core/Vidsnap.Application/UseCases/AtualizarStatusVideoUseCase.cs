@@ -41,9 +41,9 @@ namespace Vidsnap.Application.UseCases
                         {
                             //Move para a DLQ quando o vídeo não é encontrado no banco de dados
                             //ou quando o status enviado é menor ou igual ao status atual do vídeo
-                            await _messageQueueService.MoverParaDlqAsync(queueMessage, cancellationToken);
-                            _logger.LogWarning("Mensagem enviada para DLQ pois o vídeo não existe ou o status enviado é menor ou igual ao status atual: {Mensagem}",
+                            _logger.LogWarning("Enviando para DLQ pois o vídeo não existe ou o status enviado é menor ou igual ao status atual: {Mensagem}",
                                 JsonSerializer.Serialize(queueMessage));
+                            await _messageQueueService.MoverParaDlqAsync(queueMessage, cancellationToken);
                             continue;
                         }
 
@@ -65,13 +65,15 @@ namespace Vidsnap.Application.UseCases
                         {
                             await _videoPublisher.PublicarProcessamentoFinalizadoAsync(video, cancellationToken);
                         }
+
+                        _logger.LogInformation("Mensagem processada com sucesso: {Mensagem}", JsonSerializer.Serialize(queueMessage));
                     }
                     else
                     {
                         //Move para a DLQ quando o status não é reconhecido
-                        await _messageQueueService.MoverParaDlqAsync(queueMessage, cancellationToken);
-                        _logger.LogWarning("Mensagem inválida: {Mensagem} \nErros: {Erros}",
+                        _logger.LogWarning("Enviando para DLQ porque a mensagem é inválida: {Mensagem} \nErros: {Erros}",
                                 JsonSerializer.Serialize(queueMessage), JsonSerializer.Serialize(validationResult.Errors));
+                        await _messageQueueService.MoverParaDlqAsync(queueMessage, cancellationToken);
                     }
                 }
                 catch(Exception ex)

@@ -85,7 +85,7 @@ jobs:
       run: |
         echo "Coverage Percentage: ${{ steps.coverage.outputs.coverage_percentage }}%"
 
-        # if [[ $(bc <<< "${{ steps.coverage.outputs.coverage_percentage }} < 0") -eq 1 ]]; then
+        # if [[ $(bc <<< "${{ steps.coverage.outputs.coverage_percentage }} < 70") -eq 1 ]]; then
         #   echo "Coverage percentage is less than 0%!"
         #   exit 1
         # fi

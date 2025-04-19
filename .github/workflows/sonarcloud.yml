@@ -1,0 +1,66 @@
+name: sonarqube
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  sonar-analysis:
+    name: Analyze SnackTech
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Set Solution Path
+      id: set_solution_path
+      run: |
+        # Informar aqui o caminho para o arquivo da solution
+        SOLUTION_PATH="./SnackTech.Vidsnap.sln"
+        echo "SOLUTION_PATH=$SOLUTION_PATH" >> $GITHUB_ENV
+  
+    - name: Restore dependencies
+      run: dotnet restore $SOLUTION_PATH
+
+    - name: Build
+      run: dotnet build $SOLUTION_PATH --configuration Release
+  
+    - name: Install SonarScanner
+      run: |
+        dotnet tool install --global dotnet-sonarscanner
+
+    - name: Install Coverlet
+      run: |
+        dotnet tool install --global coverlet.console
+
+    - name: Run SonarScanner
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        dotnet-sonarscanner begin /k:"SnackTechTeam_snacktech-vidsnap-api" \
+          /o:"snacktechteam" \
+          /d:sonar.host.url="https://sonarcloud.io" \
+          /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
+          /d:sonar.sources=src \
+          /d:sonar.cs.opencover.reportsPaths="**/coverage.*.opencover.xml" \
+          /d:sonar.exclusions="**/infra/terraform/**"
+
+        dotnet build $SOLUTION_PATH
+
+        coverlet ./src/Tests/Vidsnap.UnitTest/bin/Debug/net8.0/Vidsnap.UnitTest.dll \
+          --target "dotnet" \
+          --targetargs "test src/Tests/Vidsnap.UnitTest --no-build --nologo" \
+          --format opencover \
+          --output "TestResults/coverage.unit.opencover.xml"
+
+        coverlet ./src/Tests/Vidsnap.BddTest/Vidsnap.BddTest/bin/Release/net8.0/Vidsnap.BddTest.dll \
+          --target "dotnet" \
+          --targetargs "test src/Tests/Vidsnap.BddTest/Vidsnap.BddTest --no-build --nologo" \
+          --format opencover \
+          --output "TestResults/coverage.bdd.opencover.xml"
+
+        dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}" 

@@ -11,6 +11,7 @@ spec:
       labels:
         app: api-videos-pod
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: api-videos-container
           image: # valor será incluido no pipeline
@@ -56,8 +57,13 @@ spec:
               memory: "96Mi"
               cpu: "100m"
             limits:
-              memory: "256Mi"
-              cpu: "500m"
+              memory: "512Mi"
+              cpu: "1000m"
+          
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+
           ports:
             - containerPort: 8080
           livenessProbe:

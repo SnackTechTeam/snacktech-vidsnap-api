@@ -9,13 +9,13 @@ services:
       - snacktech-vidsnap-net
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: Senha@12345 #TODO: guardar isso em local mais seguro
+      SA_PASSWORD: <informe aqui>
     ports:
       - 1433:1433 #TODO: talvez remover isso antes de entregar, para que nao seja possivel acessar o banco sem ser pela aplicacao
     volumes:
       - sql-db-volume:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Senha@12345 -Q 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P <informe aqui> -Q 'SELECT 1' || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -30,9 +30,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
-      - AWS_ACCESS_KEY_ID=ASIAVHDT5ZMWAJRDERT5
-      - AWS_SECRET_ACCESS_KEY=Htk3HHhaKfNN/nW62ozZvRU5SS4IXfaM2abDlCZ9
-      - AWS_SESSION_TOKEN=IQoJb3JpZ2luX2VjEKj//////////wEaCXVzLXdlc3QtMiJGMEQCIEquIhqaHQGQiPA3lkW6lp7zunDJSAgPEgpqWZ9K5bArAiBYXvKSa/zedi5XEbJYgl3GP7Fi8Ws2gRkQa+ESPUZtrSqsAgghEAIaDDM1ODg3Mjg5NDI1MiIM8dzsZaeXXGd65eoGKokCvE+8iM41Ve6TzN8uegxdvFw6mtQZBtGiXBXfK2AOTCL6Vg4ReAqfGhcwGzcpbExMYn2xAZpj5OLIKGJld6sHqBn46RazkZVTQydl5Lj//tZCmhRTzn3yl7pgbIQlQzqB2WNaVhkmpGc+ONjh1YQgtkUZwnuMXudU4dIleXxACtxrdWnCdsSv/n3lWOIDekJ6hedMmfW6iCOTPbTvllxjXFmHbdii6MbpAHPHag3+wlqH5hyiM9+A6yy9XlRfNoigYIp3xgbODYJLiOAbcIbOmyDSxbdwLxg6rbXwrkgz2xyRQlmZgwJhbutOhCNpoWwWvWoIHCeS6w2v223cs4y8UBF2zRe/zT3S7zDO58G/BjqeAYOllK/o1O8O5qq4ql7wQ5F8QlHVDWWcRhvB/ZWXJ0CSXOiZ42J+mZqyQmmn3PA4/UuvK6h6ICK6MKOHkAqqIj65acZ017K7LTx0KoYyVDFQbiA3E5GkoJMKu+XkuGIRfM6QlWiqxtQqJfY26LJSw5yvNByzEXbjDSY42Fbj1rLVKu7PZtkIk3PNX+rYFKbHERr6a/0eShHHVqMiPaEu
+      - AWS_ACCESS_KEY_ID=[SEU-ACCESS-KEY-AQUI]
+      - AWS_SECRET_ACCESS_KEY=[SEU-SECRET-KEY-AQUI]
+      - AWS_SESSION_TOKEN=[SEU-SESSION-TOKEN-AQUI]
       - AWS_REGION=us-east-1
       - AWS__CloudFileStorage__ContainerName=vidsnap-video-upload
       - AWS__CloudFileStorage__TimeoutDuration=1
@@ -58,8 +58,9 @@ services:
       - AWS__Credentials__SessionToken=[SEU-SESSION-TOKEN-AQUI]
       - AWS_REGION=us-east-1
       - AWS__Queues__MaxNumberOfMessages=5
-      - AWS__Queues__QueueURL=https://sqs.us-east-1.amazonaws.com/358872894252/vidsnap-atualiza-video-status
-      - AWS__Queues__DlqQueueURL=https://sqs.us-east-1.amazonaws.com/358872894252/vidsnap-atualiza-video-status-dlq
+      - AWS__Queues__QueueAtualizaStatusURL=https://sqs.us-east-1.amazonaws.com/<informe-aqui>/vidsnap-atualiza-video-status
+      - AWS__Queues__DlqQueueAtualizaStatusURL=https://sqs.us-east-1.amazonaws.com/<informe-aqui>/vidsnap-atualiza-video-status-dlq
+      - AWS__Queues__QueueEnviaNotificacaoURL=https://sqs.us-east-1.amazonaws.com/<informe-aqui>/vidsnap-notifica-usuario
     restart: on-failure
     networks:
       - snacktech-vidsnap-net
