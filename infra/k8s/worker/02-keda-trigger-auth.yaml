@@ -1,0 +1,17 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: keda-aws-credentials-auth
+  # namespace: <your-namespace> # Optional: Specify if your secret is in a different namespace than KEDA
+spec:
+  secretTargetRef:
+    - parameter: awsAccessKeyID     # KEDA parameter name for AWS Access Key ID
+      name: aws-credential-secret # Your existing secret name
+      key: access-key             # Key in the secret for Access Key ID
+    - parameter: awsSecretAccessKey # KEDA parameter name for AWS Secret Access Key
+      name: aws-credential-secret # Your existing secret name
+      key: secret-key             # Key in the secret for Secret Access Key
+    - parameter: awsSessionToken    # KEDA parameter name for AWS Session Token
+      name: aws-credential-secret # Your existing secret name
+      key: session-token          # Key in the secret for Session Token
+    

@@ -225,6 +225,12 @@ jobs:
         run: |
           yq e '.spec.template.spec.containers[0].image = "'"$IMAGE_URI"'"' -i infra/k8s/worker/01-worker-deployment.yaml || { echo "Error updating ecr_image_url_repo_tag value"; exit 1; }
       
+      - name: Replace queueName and awsRegion in infra/k8s/03-keda-scale.yaml
+        run: |
+          yq e '.spec.triggers[0].metadata.queueName = "'"${{ vars.VIDEOS_STATUS_SQS_NAME }}"'"' -i infra/k8s/03-keda-scale.yaml || { echo "Error updating queueName"; exit 1; }
+          yq e '.spec.triggers[0].metadata.awsRegion = "'"${{ vars.AWS_REGION }}"'"' -i infra/k8s/03-keda-scale.yaml || { echo "Error updating awsRegion"; exit 1; } 
+      
+      
       - name: Deploy to EKS
         run: |
           kubectl apply -f infra/k8s/worker
