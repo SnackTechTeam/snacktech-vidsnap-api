@@ -11,6 +11,10 @@ EXPOSE 8081
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
+
+# Cria um usuário com ID 1000
+RUN useradd --create-home --uid 1000 appuser
+
 WORKDIR /src
 
 COPY ["Driving/Vidsnap.Api/Vidsnap.Api.csproj", "Driving/Vidsnap.Api/"]
@@ -37,4 +41,11 @@ RUN dotnet publish "./Vidsnap.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publis
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# Define o usuário padrão
+RUN chown -R appuser:appuser /src
+USER appuser
+
+EXPOSE 8081
+
 ENTRYPOINT ["dotnet", "Vidsnap.Api.dll"]

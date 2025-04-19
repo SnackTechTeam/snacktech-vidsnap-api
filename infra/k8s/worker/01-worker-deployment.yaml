@@ -11,6 +11,7 @@ spec:
       labels:
         app: worker-videos-status-pod
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: worker-videos-status-container
           image: # valor será incluido no pipeline
@@ -69,4 +70,8 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "1000m"
+
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
          
