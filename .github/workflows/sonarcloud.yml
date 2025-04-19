@@ -57,7 +57,7 @@ jobs:
           --format opencover \
           --output "TestResults/coverage.unit.opencover.xml"
 
-        coverlet ./src/Tests/Vidsnap.BddTest/bin/Release/net8.0/Vidsnap.BddTest.dll \
+        coverlet ./src/Tests/Vidsnap.BddTest/Vidsnap.BddTest/bin/Release/net8.0/Vidsnap.BddTest.dll \
           --target "dotnet" \
           --targetargs "test src/Tests/Vidsnap.BddTest --no-build --nologo" \
           --format opencover \
