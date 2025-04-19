@@ -52,7 +52,7 @@ jobs:
 
         dotnet build $SOLUTION_PATH
 
-        coverlet ./src/Tests/Vidsnap.UnitTest/bin/Debug/net8.0/unit.tests.dll \
+        coverlet ./src/Tests/Vidsnap.UnitTest/bin/Debug/net8.0/Vidsnap.UnitTest.dll \
           --target "dotnet" \
           --targetargs "test src/Tests/Vidsnap.UnitTest --no-build --nologo" \
           --format opencover \
