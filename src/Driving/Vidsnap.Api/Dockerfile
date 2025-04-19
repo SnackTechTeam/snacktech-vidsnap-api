@@ -44,7 +44,7 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Define o usuário padrão
-RUN chown -R appuser:appuser /src
+RUN chown -R appuser:appuser /app
 USER appuser
 
 EXPOSE 8081
