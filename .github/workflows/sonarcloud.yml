@@ -1,65 +1,61 @@
-name: SonarQube
+name: sonarqube
+
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches: [ "main" ]
+  push:
+    branches: [ "deploy" ]
+
 jobs:
-  build:
-    name: Build and analyze
-    runs-on: windows-latest
+  sonar-analysis:
+    name: Analyze SnackTech
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: 'zulu' # Alternative distribution options are available.
-      
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
 
-      - name: Set Solution Path
-        id: set_solution_path
-        shell: pwsh # Explicitly set shell to PowerShell (default on Windows)
-        run: |
-            # Set the path to the solution file here
-            $SOLUTION_PATH = "./SnackTech.Vidsnap.sln"
-            echo "SOLUTION_PATH=$SOLUTION_PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+    - name: Set Solution Path
+      id: set_solution_path
+      run: |
+        # Informar aqui o caminho para o arquivo da solution
+        SOLUTION_PATH="./SnackTech.Vidsnap.sln"
+        echo "SOLUTION_PATH=$SOLUTION_PATH" >> $GITHUB_ENV
+  
+    - name: Restore dependencies
+      run: dotnet restore $SOLUTION_PATH
 
-      - name: Cache SonarQube Cloud packages
-        uses: actions/cache@v4
-        with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache SonarQube Cloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v4
-        with:
-          path: .\.sonar\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
-      - name: Install SonarQube Cloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: powershell
-        run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-      - name: Build and analyze
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        shell: powershell
-        run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"SnackTechTeam_snacktech-vidsnap-api" /o:"snacktechteam" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.cobertura.reportPaths="merged.cobertura.xml" 
-          
-          dotnet restore $env:SOLUTION_PATH
-          dotnet build $env:SOLUTION_PATH --configuration Release --no-restore
-          dotnet test $env:SOLUTION_PATH --configuration Release --no-build --collect:"XPlat Code Coverage" --logger:"trx;LogFileName=..\TestResults.trx" # Using backslash for Windows path
-      
-          dotnet tool install -g dotnet-reportgenerator-globaltool
-          dotnet tool install -g dotnet-coverage
-        
-          dotnet-coverage merge *.cobertura.xml --recursive --output merged.cobertura.xml --output-format cobertura
-          reportgenerator -reports:./**/merged.cobertura.xml -targetdir:./CoverageReport -reporttypes:Html
+    - name: Build
+      run: dotnet build $SOLUTION_PATH --configuration Release
+  
+    - name: Install SonarScanner
+      run: |
+        dotnet tool install --global dotnet-sonarscanner
 
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+    - name: Install Coverlet
+      run: |
+        dotnet tool install --global coverlet.console
+
+    - name: Run SonarScanner
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        dotnet-sonarscanner begin /k:"SnackTechTeam_snacktech-vidsnap-api" \
+          /o:"snacktechteam" \
+          /d:sonar.host.url="https://sonarcloud.io" \
+          /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
+          /d:sonar.sources=src \
+          /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+
+        dotnet build $SOLUTION_PATH
+
+        coverlet ./tests/unit.tests/bin/Debug/net8.0/unit.tests.dll \
+          --target "dotnet" \
+          --targetargs "test tests/unit.tests --no-build --nologo" \
+          --format opencover \
+          --output "TestResults/coverage.opencover.xml"
+
+        dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
