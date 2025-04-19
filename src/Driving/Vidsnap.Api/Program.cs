@@ -50,16 +50,16 @@ namespace Vidsnap.Api
                 c.IncludeXmlComments(xmlPath);
             });
 
-            string dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
-
-            if (string.IsNullOrEmpty(dbConnectionString))
-            {
-                throw new InvalidOperationException(
-                    "Could not find a connection string named 'DefaultConnection'.");
-            }
-
             if (!builder.Environment.IsEnvironment("Testing"))
             {
+                string dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+
+                if (string.IsNullOrEmpty(dbConnectionString))
+                {
+                    throw new InvalidOperationException(
+                        "Could not find a connection string named 'DefaultConnection'.");
+                }
+
                 builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(dbConnectionString));
             }
