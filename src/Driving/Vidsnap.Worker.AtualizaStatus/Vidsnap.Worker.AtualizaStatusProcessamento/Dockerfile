@@ -16,7 +16,13 @@ COPY ["Core/Vidsnap.Domain/Vidsnap.Domain.csproj", "Core/Vidsnap.Domain/"]
 COPY ["Driven/Vidsnap.DataBase/Vidsnap.DataBase.csproj", "Driven/Vidsnap.DataBase/"]
 COPY ["Driven/Vidsnap.SQS/Vidsnap.SQS.csproj", "Driven/Vidsnap.SQS/"]
 RUN dotnet restore "./Driving/Vidsnap.Worker.AtualizaStatus/Vidsnap.Worker.AtualizaStatusProcessamento/Vidsnap.Worker.AtualizaStatusProcessamento.csproj"
-COPY . .
+
+COPY ["Driving/Vidsnap.Worker.AtualizaStatus/Vidsnap.Worker.AtualizaStatusProcessamento/", "Driving/Vidsnap.Worker.AtualizaStatus/Vidsnap.Worker.AtualizaStatusProcessamento/"]
+COPY ["Core/Vidsnap.Application/", "Core/Vidsnap.Application/"]
+COPY ["Core/Vidsnap.Domain/", "Core/Vidsnap.Domain/"]
+COPY ["Driven/Vidsnap.DataBase/", "Driven/Vidsnap.DataBase/"]
+COPY ["Driven/Vidsnap.SQS/", "Driven/Vidsnap.SQS/"]
+
 WORKDIR "/src/Driving/Vidsnap.Worker.AtualizaStatus/Vidsnap.Worker.AtualizaStatusProcessamento"
 RUN dotnet build "./Vidsnap.Worker.AtualizaStatusProcessamento.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

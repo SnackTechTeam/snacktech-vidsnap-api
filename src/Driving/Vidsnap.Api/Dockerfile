@@ -23,7 +23,12 @@ COPY ["Driven/Vidsnap.SQS/Vidsnap.SQS.csproj", "Driven/Vidsnap.SQS/"]
 
 RUN dotnet restore "./Driving/Vidsnap.Api/Vidsnap.Api.csproj"
 
-COPY . .
+COPY Driving/Vidsnap.Api/ ./Driving/Vidsnap.Api/
+COPY Core/Vidsnap.Application/ ./Core/Vidsnap.Application/
+COPY Core/Vidsnap.Domain/ ./Core/Vidsnap.Domain/
+COPY Driven/Vidsnap.Bucket/ ./Driven/Vidsnap.Bucket/
+COPY Driven/Vidsnap.DataBase/ ./Driven/Vidsnap.DataBase/
+COPY Driven/Vidsnap.SQS/ ./Driven/Vidsnap.SQS/
 
 WORKDIR "/src/Driving/Vidsnap.Api"
 
